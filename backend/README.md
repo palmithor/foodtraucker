@@ -9,7 +9,13 @@ npm install -g serverless
 ```
 
 ## Configure AWS Credentials
+
+``` bash
  serverless config credentials --provider aws --key $KEY --secret $SECRET --profile foodtraucker
+ ```
 
 ## Deployment
+
+``` bash
 serverless deploy --profile foodtraucker
+```
