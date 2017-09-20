@@ -22,9 +22,12 @@ provider:
   runtime: java8
 
 # you can overwrite defaults here
-#  stage: test
+  stage: test
   region: eu-central-1
   profile: foodtraucker
+
+custom:
+  myStage: ${opt:stage, self:provider.stage}
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -43,7 +46,7 @@ provider:
 #            - "/*"
 
 # you can define service wide environment variables here
-#  environment:
+#  environment: 
 #    variable1: value1
 
 # you can add packaging information here
@@ -51,13 +54,30 @@ package:
   artifact: target/foodtraucker.jar
 
 functions:
-  hello:
-    handler: com.serverless.Handler
+  signup:
+    handler: com.foodtraucker.serverless.users.SignupHandler
+    events:
+      - cognitoUserPool:
+          pool: foodtraucker-${self:custom.myStage}
+          trigger: PostConfirmation
+  updateUser:
+    handler: com.foodtraucker.serverless.users.UpdateUserHandler
+    events:
+      - http:
+          path: users/{id}
+          method: get
+          authorizer: 
+          # TODO this is hardcoded to the test user pool - read from env 
+            arn: arn:aws:cognito-idp:eu-central-1:174046704947:userpool/eu-central-1_RxnIPPZui
+          request:
+            parameters:
+              paths:
+                id: true
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
-#    events:
+#     events:
 #      - http:
 #          path: users/create
 #          method: get
@@ -78,9 +98,6 @@ functions:
 #              state:
 #                - pending
 #      - cloudwatchLog: '/aws/lambda/hello'
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
 
 #    Define function environment variables here
 #    environment:

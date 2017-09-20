@@ -1,5 +1,4 @@
-package com.serverless;
-
+package com.foodtraucker.serverless.users;
 import java.util.Map;
 
 public class Response {
