@@ -27,7 +27,11 @@ provider:
   profile: foodtraucker
 
 custom:
-  myStage: ${opt:stage, self:provider.stage}
+  stages:
+    test:
+      user-pool-arn: arn:aws:cognito-idp:eu-central-1:174046704947:userpool/eu-central-1_RxnIPPZui
+    prod:
+      user-pool-arn: arn:aws:cognito-idp:eu-central-1:174046704947:userpool/eu-central-1_xJ32dr9cL
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -58,7 +62,7 @@ functions:
     handler: com.foodtraucker.serverless.users.SignupHandler
     events:
       - cognitoUserPool:
-          pool: foodtraucker-${self:custom.myStage}
+          pool: foodtraucker-${opt:stage, self:provider.stage}
           trigger: PostConfirmation
   updateUser:
     handler: com.foodtraucker.serverless.users.UpdateUserHandler
@@ -66,9 +70,8 @@ functions:
       - http:
           path: users/{id}
           method: get
-          authorizer: 
-          # TODO this is hardcoded to the test user pool - read from env 
-            arn: arn:aws:cognito-idp:eu-central-1:174046704947:userpool/eu-central-1_RxnIPPZui
+          authorizer:
+            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
           request:
             parameters:
               paths:
