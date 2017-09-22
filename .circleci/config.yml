@@ -3,8 +3,8 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
-jobs:
-  backend_java:
+backend_java:
+  build:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
@@ -41,8 +41,9 @@ jobs:
       - run: 
           name: Backend Tests
           command: mvn integration-test
-  
-  webapp:
+
+webapp:
+  build:
     docker:
       - image: circleci/node:4.8.2
       
