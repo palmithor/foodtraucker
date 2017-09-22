@@ -44,7 +44,8 @@ jobs:
   
   webapp:
     docker:
-      - image: circleci/node:4.8.2  
+      - image: circleci/node:4.8.2
+      
     
     working_directory: ~/repo/webapp
 
