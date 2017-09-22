@@ -22,6 +22,7 @@ jobs:
     
     steps:
       - checkout
+          path: ~/repo
 
       # Download and cache dependencies
       - restore_cache:
@@ -51,6 +52,7 @@ jobs:
 
     steps:
       - checkout
+          path: ~/repo
 
       - run:
           name: Update npm
