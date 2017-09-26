@@ -85,6 +85,7 @@ jobs:
           name: Deploy master or develop to s3
           working_directory: ~/repo/webapp
           command: |
+            apt-get install awscli
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               aws s3 sync . s3://aws-website-foodtraucker-prod-ffxtv --delete
             elif [ "${CIRCLE_BRANCH}" == "feature/InitCircleCI" ]; then
