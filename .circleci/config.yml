@@ -76,7 +76,7 @@ jobs:
           working_directory: ~/repo/webapp
           command: npm test
 
-      - build: 
+      - run: 
           name: build app
           working_directory: ~/repo/webapp
           command: npm run build
