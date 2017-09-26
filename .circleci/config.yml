@@ -76,6 +76,20 @@ jobs:
           working_directory: ~/repo/webapp
           command: npm test
 
+      - build: 
+          name: build app
+          working_directory: ~/repo/webapp
+          command: npm run build
+      - deploy:
+          name: Deploy master or develop to s3
+          working_directory: ~/repo/webapp/dist
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              aws s3 sync jekyll/_site/docs s3://aws-website-foodtraucker-prod-ffxtv --delete
+            else if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              aws s3 sync jekyll/_site/docs s3://aws-website-foodtraucker-test-9th9a --delete
+            fi
+
 workflows:
   version: 2
   backend_and_frontend:
