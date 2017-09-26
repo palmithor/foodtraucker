@@ -87,7 +87,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               aws s3 sync . s3://aws-website-foodtraucker-prod-ffxtv --delete
-            else if [ "${CIRCLE_BRANCH}" == "feature/InitCircleCI" ]; then
+            elif [ "${CIRCLE_BRANCH}" == "feature/InitCircleCI" ]; then
               aws s3 sync . s3://aws-website-foodtraucker-test-9th9a --delete
             fi
 
