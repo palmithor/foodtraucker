@@ -87,11 +87,10 @@ jobs:
           command: |
             sudo apt-get install awscli
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              aws s3 sync . s3://aws-website-foodtraucker-prod-ffxtv --delete
-            elif [ "${CIRCLE_BRANCH}" == "feature/InitCircleCI" ]; then
+              aws s3 sync ./dist s3://aws-website-foodtraucker-prod-ffxtv --delete
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
               aws s3 sync ./dist s3://aws-website-foodtraucker-test-9th9a --delete
             fi
-
 workflows:
   version: 2
   backend_and_frontend:
