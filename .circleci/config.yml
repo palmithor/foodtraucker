@@ -83,12 +83,12 @@ jobs:
 
       - deploy:
           name: Deploy master or develop to s3
-          working_directory: ~/repo/webapp/dist
+          working_directory: ~/repo/webapp
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               aws s3 sync . s3://aws-website-foodtraucker-prod-ffxtv --delete
             elif [ "${CIRCLE_BRANCH}" == "feature/InitCircleCI" ]; then
-              aws s3 sync . s3://aws-website-foodtraucker-test-9th9a --delete
+              aws s3 sync ./dist s3://aws-website-foodtraucker-test-9th9a --delete
             fi
 
 workflows:
