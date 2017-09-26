@@ -19,7 +19,6 @@ service: foodtraucker # NOTE: update this with your service name
 
 provider:
   name: aws
-  runtime: java8
 
 # you can overwrite defaults here
   stage: test
@@ -54,17 +53,25 @@ custom:
 #    variable1: value1
 
 # you can add packaging information here
+#package:
+#  artifact: backend.tar
 package:
-  artifact: target/foodtraucker.jar
+  individually: true
 
 functions:
   signup:
-    handler: com.foodtraucker.serverless.users.SignupHandler
+    runtime: nodejs6.10
+    handler: auth.signup
+    package:
+      artifact: backend_node.zip
     events:
       - cognitoUserPool:
           pool: foodtraucker-${opt:stage, self:provider.stage}
           trigger: PostConfirmation
   updateUser:
+    runtime: java8
+    package:
+      artifact: backend_java/target/foodtraucker.jar
     handler: com.foodtraucker.serverless.users.UpdateUserHandler
     events:
       - http:

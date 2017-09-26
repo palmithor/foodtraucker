@@ -70,6 +70,12 @@ jobs:
           name: Install dependencies
           working_directory: ~/repo/webapp
           command: npm install
+
+      - save_cache:
+          working_directory: ~/repo/webapp
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
       
       - run: 
           name: run tests
@@ -96,4 +102,12 @@ workflows:
   backend_and_frontend:
     jobs:
       - backend_java
+      #- backend_node
       - webapp
+      #- deploy_frontend
+      #    requires: 
+      #      - webapp
+      #- deploy_backend
+      #    requires: 
+      #      - backend_java
+      #      - backend_node
