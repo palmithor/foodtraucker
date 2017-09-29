@@ -36,7 +36,7 @@ jobs:
           command: mvn dependency:go-offline
 
       - save_cache:
-          working_directory: ~/repo/webapp
+          working_directory: ~/repo/backend_java
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
