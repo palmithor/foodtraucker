@@ -27,7 +27,7 @@ jobs:
       - restore_cache:
           working_directory: ~/repo/backend_java
           keys:
-          - v1-dependencies-{{ checksum "pom.xml" }}
+          - v1-dependencies-{{ checksum "backend_java/pom.xml" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
@@ -39,7 +39,7 @@ jobs:
           working_directory: ~/repo/backend_java
           paths:
             - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
+          key: v1-dependencies-{{ checksum "backend_java/pom.xml" }}
         
       # run tests!
       - run: 
@@ -63,8 +63,7 @@ jobs:
           command: 'sudo npm install -g npm@latest'
       
       - restore_cache:
-          working_directory: ~/repo/webapp
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "webapp/package.json" }}
 
       - run: 
           name: Install dependencies
@@ -72,10 +71,9 @@ jobs:
           command: npm install
 
       - save_cache:
-          working_directory: ~/repo/webapp
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "webapp/package.json" }}
           paths:
-            - node_modules
+            - webapp/node_modules
       
       - run: 
           name: run tests
