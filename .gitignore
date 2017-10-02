@@ -1,2 +1,3 @@
 backend_node.zip
 .serverless
+backend_node/node_modules
