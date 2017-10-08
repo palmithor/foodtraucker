@@ -65,7 +65,6 @@ functions:
     package:
       artifact: backend_node.zip
     events:
-      - cloudwatchLog: '/aws/lambda/foodtraucker_signup'
       - cognitoUserPool:
           pool: foodtraucker-${opt:stage, self:provider.stage}
           trigger: PostConfirmation
