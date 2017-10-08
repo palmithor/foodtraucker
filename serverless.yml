@@ -24,6 +24,7 @@ provider:
   stage: test
   region: eu-central-1
   profile: foodtraucker
+  versionFunctions: false # for now when we are experimenting
 
 custom:
   stages:
