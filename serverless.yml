@@ -54,8 +54,7 @@ custom:
 #    variable1: value1
 
 # you can add packaging information here
-#package:
-#  artifact: backend.tar
+
 package:
   individually: true
 
