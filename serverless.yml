@@ -24,6 +24,18 @@ provider:
   stage: test
   region: eu-central-1
   profile: foodtraucker
+  environment:
+    USERS_TABLE: ${self:service}-users-${opt:stage, self:provider.stage}
+    TRAUCKS_TABLE: ${self:service}-traucks-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRAUCKS_TABLE}
 
 custom:
   stages:
@@ -49,7 +61,7 @@ custom:
 #            - "/*"
 
 # you can define service wide environment variables here
-#  environment: 
+#  environment:
 #    variable1: value1
 
 # you can add packaging information here
@@ -124,3 +136,31 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+resources:
+  Resources:
+    UserTableDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits:  1
+          WriteCapacityUnits: 1
+    TraucksTableDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TRAUCKS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id #GUID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits:  1
+          WriteCapacityUnits: 1
