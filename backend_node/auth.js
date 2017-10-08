@@ -1,9 +1,15 @@
 'use strict';
 
+var aws = require('aws-sdk');
+
 //const uuid = require('uuid');
 //const dynamodb = require('./dynamodb');
 
-module.exports.signup = (event, context, callback) => {
-    console.log('hello world');
-    callback(null, {message: "OK"})
+//const userTable = process.env.USERS_TABLE;
+//const traucksTable = process.env.TRAUCKS_TABLE;
+
+
+module.exports.signup = function(event, context) {
+    console.log('Event: ' + event);
+    context.done(null, event);
 };
