@@ -65,10 +65,11 @@ functions:
     handler: auth.signup
     package:
       artifact: backend_node.zip
-    events:
-      - cognitoUserPool:
-          pool: foodtraucker-${opt:stage, self:provider.stage}
-          trigger: PostConfirmation
+    # Having this event here below unfortunately creates a user pool if the stack is setup from scratch
+    # events:
+    #  - cognitoUserPool:
+    #      pool: foodtraucker-${opt:stage, self:provider.stage}
+    #      trigger: PostConfirmation
   updateUser:
     runtime: java8
     package:

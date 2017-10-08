@@ -10,6 +10,6 @@ var aws = require('aws-sdk');
 
 
 module.exports.signup = function(event, context) {
-    console.log('Event: ' + event);
+    console.log('Event: ' + JSON.stringify(event));
     context.done(null, event);
 };
