@@ -1,0 +1,21 @@
+{
+    "version": "1",
+    "region": "eu-central-1",
+    "userPoolId": "eu-central-1_RxnIPPZui",
+    "userName": "24798a62-47d1-46d7-8e96-8d27ea79424a",
+    "callerContext": {
+        "awsSdkVersion": "aws-sdk-java-console",
+        "clientId": "vqjsnpiojek70s79t4m1kt8li"
+    },
+    "triggerSource": "PostConfirmation_ConfirmSignUp",
+    "request": {
+        "userAttributes": {
+            "sub": "24798a62-47d1-46d7-8e96-8d27ea79424a",
+            "cognito:email_alias": "palmi@cygni.se",
+            "cognito:user_status": "CONFIRMED",
+            "email_verified": "true",
+            "email": "palmi@cygni.se"
+        }
+    },
+    "response": {}
+}

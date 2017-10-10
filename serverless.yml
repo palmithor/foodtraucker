@@ -24,9 +24,10 @@ provider:
   stage: test
   region: eu-central-1
   profile: foodtraucker
+  versionFunctions: false # for now when we are experimenting
   environment:
-    USERS_TABLE: ${self:service}-users-${opt:stage, self:provider.stage}
-    TRAUCKS_TABLE: ${self:service}-traucks-${opt:stage, self:provider.stage}
+    USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-users
+    TRAUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-traucks
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -36,6 +37,10 @@ provider:
       Action:
         - dynamodb:*
       Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRAUCKS_TABLE}
+    - Effect: Allow
+      Action: 
+        - dynamodb:ListTables
+      Resource: "*"
 
 custom:
   stages:
@@ -44,42 +49,22 @@ custom:
     prod:
       user-pool-arn: arn:aws:cognito-idp:eu-central-1:174046704947:userpool/eu-central-1_xJ32dr9cL
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  artifact: backend.tar
 package:
   individually: true
 
 functions:
   signup:
+    environment:
+      NODE_ENV: ${opt:stage, self:provider.stage}
     runtime: nodejs6.10
     handler: auth.signup
     package:
       artifact: backend_node.zip
-    events:
-      - cognitoUserPool:
-          pool: foodtraucker-${opt:stage, self:provider.stage}
-          trigger: PostConfirmation
+    # Having this event here below unfortunately creates a user pool if the stack is setup from scratch
+    # events:
+    #  - cognitoUserPool:
+    #      pool: foodtraucker-${opt:stage, self:provider.stage}
+    #      trigger: PostConfirmation
   updateUser:
     runtime: java8
     package:
@@ -96,46 +81,6 @@ functions:
               paths:
                 id: true
 
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
-#     events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-#      - cloudwatchEvent:
-#          event:
-#            source:
-#              - "aws.ec2"
-#            detail-type:
-#              - "EC2 Instance State-change Notification"
-#            detail:
-#              state:
-#                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
-
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
-
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
 resources:
   Resources:
     UserTableDynamoDB:
