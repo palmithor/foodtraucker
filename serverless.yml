@@ -28,7 +28,6 @@ provider:
   environment:
     USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-users
     TRAUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-traucks
-    USER_AUTH_TABLE: ${self:service}-${opt:stage, self:provider.stage}-user-auth
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -38,10 +37,6 @@ provider:
       Action:
         - dynamodb:*
       Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRAUCKS_TABLE}
-    - Effect: Allow
-      Action:
-        - dynamodb:*
-      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USER_AUTH_TABLE}
     - Effect: Allow
       Action: 
         - dynamodb:ListTables
@@ -110,19 +105,6 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits:  1
-          WriteCapacityUnits: 1
-    UserAuthTableDynamoDB:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:provider.environment.USER_AUTH_TABLE}
-        AttributeDefinitions:
-          - AttributeName: cognito_id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: cognito_id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits:  1
