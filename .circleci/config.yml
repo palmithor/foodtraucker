@@ -140,7 +140,7 @@ workflows:
       - backend_java
       # - backend_node
       - webapp
-      - deploy_webapp
+      - deploy_webapp:
           requires: 
             - webapp
       # - deploy_backend
