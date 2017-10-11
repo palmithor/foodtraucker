@@ -83,7 +83,14 @@ jobs:
       - run: 
           name: build app
           working_directory: ~/repo/webapp
-          command: npm run build
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              npm run build              
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              sudo npm install -g webpack
+              webpack --config ./build/webpack.dev.conf.js --progress
+            fi
+
 
       - deploy:
           name: Deploy master or develop to s3
@@ -100,12 +107,12 @@ workflows:
   backend_and_frontend:
     jobs:
       - backend_java
-      #- backend_node
+      - backend_node
       - webapp
-      #- deploy_frontend
-      #    requires: 
-      #      - webapp
-      #- deploy_backend
-      #    requires: 
-      #      - backend_java
-      #      - backend_node
+      - deploy_frontend
+          requires: 
+            - webapp
+      - deploy_backend
+          requires: 
+            - backend_java
+            - backend_node
