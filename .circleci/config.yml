@@ -83,6 +83,38 @@ jobs:
       - run: 
           name: build app
           working_directory: ~/repo/webapp
+          command: npm run build
+
+  deploy_webapp:
+    docker:
+      - image: circleci/node:4.8.2
+      
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: Update npm
+          working_directory: ~/repo/webapp
+          command: 'sudo npm install -g npm@latest'
+      
+      - restore_cache:
+          key: dependency-cache-{{ checksum "webapp/package.json" }}
+
+      - run: 
+          name: Install dependencies
+          working_directory: ~/repo/webapp
+          command: npm install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "webapp/package.json" }}
+          paths:
+            - webapp/node_modules
+
+      - run: 
+          name: build app
+          working_directory: ~/repo/webapp
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               npm run build              
@@ -90,7 +122,6 @@ jobs:
               sudo npm install -g webpack
               webpack --config ./build/webpack.dev.conf.js --progress
             fi
-
 
       - deploy:
           name: Deploy master or develop to s3
@@ -107,12 +138,12 @@ workflows:
   backend_and_frontend:
     jobs:
       - backend_java
-      - backend_node
+      # - backend_node
       - webapp
-      - deploy_frontend
+      - deploy_webapp
           requires: 
             - webapp
-      - deploy_backend
-          requires: 
-            - backend_java
-            - backend_node
+      # - deploy_backend
+      #     requires: 
+      #       - backend_java
+      #       - backend_node
