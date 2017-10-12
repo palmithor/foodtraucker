@@ -119,8 +119,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               npm run build              
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              sudo npm install -g webpack
-              webpack --config ./build/webpack.dev.conf.js --progress
+              npm run build-aws_test
             fi
 
       - deploy:
