@@ -56,11 +56,6 @@ jobs:
 
     steps:
       - checkout
-
-      #- run:
-      #    name: Update npm
-      #    working_directory: ~/repo/webapp
-      #    command: 'sudo npm install -g npm@latest'
       
       - restore_cache:
           key: dependency-cache-{{ checksum "webapp/package.json" }}
@@ -93,11 +88,6 @@ jobs:
 
     steps:
       - checkout
-
-      - run:
-          name: Update npm
-          working_directory: ~/repo/webapp
-          command: 'sudo npm install -g npm@latest'
       
       - restore_cache:
           key: dependency-cache-{{ checksum "webapp/package.json" }}
