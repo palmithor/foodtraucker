@@ -57,13 +57,13 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Update npm
-          working_directory: ~/repo/webapp
-          command: 'sudo npm install -g npm@latest'
+      #- run:
+      #    name: Update npm
+      #    working_directory: ~/repo/webapp
+      #    command: 'sudo npm install -g npm@latest'
       
-      #- restore_cache:
-      #    key: dependency-cache-{{ checksum "webapp/package.json" }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "webapp/package.json" }}
 
       - run: 
           name: Install dependencies
