@@ -12,9 +12,7 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Hello,
-      props: (route) => ({ appAwsCode: route.query.code })
+      props: (route) => ({appAwsCode: route.query.code})
     }
-    /* eslint-disable*/
-    // todo { path: '*', component: NotFoundComponent }
   ]
 })

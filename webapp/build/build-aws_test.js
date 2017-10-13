@@ -1,6 +1,6 @@
 require('./check-versions')()
 
-process.env.NODE_ENV = 'aws-test'
+process.env.NODE_ENV = 'aws_test'
 
 var ora = require('ora')
 var rm = require('rimraf')
