@@ -27,7 +27,8 @@ provider:
   versionFunctions: false # for now when we are experimenting
   environment:
     USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-users
-    TRAUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-traucks
+    TRUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-trucks
+    TRUCK_CHECKINS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-truck_checkins
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -36,7 +37,11 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:*
-      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRAUCKS_TABLE}
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRUCKS_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRUCK_CHECKINS_TABLE}
     - Effect: Allow
       Action: 
         - dynamodb:ListTables
@@ -96,10 +101,23 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1
-    TraucksTableDynamoDB:
+    TrucksTableDynamoDB:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TRAUCKS_TABLE}
+        TableName: ${self:provider.environment.TRUCKS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id #GUID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits:  1
+          WriteCapacityUnits: 1
+    TruckCheckinsTableDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TRUCK_CHECKINS_TABLE}
         AttributeDefinitions:
           - AttributeName: id #GUID
             AttributeType: S
