@@ -62,14 +62,27 @@ functions:
     environment:
       NODE_ENV: ${opt:stage, self:provider.stage}
     runtime: nodejs6.10
-    handler: auth.signup
     package:
       artifact: backend_node.zip
-    # Having this event here below unfortunately creates a user pool if the stack is setup from scratch
-    # events:
-    #  - cognitoUserPool:
-    #      pool: foodtraucker-${opt:stage, self:provider.stage}
-    #      trigger: PostConfirmation
+    handler: auth.signup
+  checkin:
+    environment:
+      NODE_ENV: ${opt:stage, self:provider.stage}
+    runtime: nodejs6.10
+    package:
+      artifact: backend_node.zip
+    handler: foodtrucks.checkin
+    events:
+      - http:
+          path: foodtrucks/{id}/checkins
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}          
+          request:
+            parameters:
+              paths:
+                id: true
   updateUser:
     runtime: java8
     package:
@@ -79,6 +92,7 @@ functions:
       - http:
           path: users/{id}
           method: get
+          cors: true
           authorizer:
             arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
           request:
@@ -106,7 +120,7 @@ resources:
       Properties:
         TableName: ${self:provider.environment.TRUCKS_TABLE}
         AttributeDefinitions:
-          - AttributeName: id #GUID
+          - AttributeName: id 
             AttributeType: S
         KeySchema:
           - AttributeName: id
@@ -119,11 +133,15 @@ resources:
       Properties:
         TableName: ${self:provider.environment.TRUCK_CHECKINS_TABLE}
         AttributeDefinitions:
-          - AttributeName: id #GUID
+          - AttributeName: foodtruck_id
+            AttributeType: S
+          - AttributeName: id # GUID
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: foodtruck_id
             KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1

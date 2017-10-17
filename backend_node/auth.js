@@ -10,26 +10,24 @@ module.exports.signup = function (event, context) {
 
     var datetime = new Date().getTime().toString();
 
-    dynamodb.listTables().promise()
-        .then(function (result) {
-            console.log(JSON.stringify(result, null, '  '));
-            return dynamodb.putItem({
-                "TableName": userTableName,
-                "Item": {
-                    "email": {
-                        "S": event.request.userAttributes.email
-                    },
-                    "date": {
-                        "S": datetime
-                    }
+    return dynamodb.putItem({
+            "TableName": userTableName,
+            "Item": {
+                "email": {
+                    "S": event.request.userAttributes.email
+                },
+                "created": {
+                    "S": datetime
                 }
-            }).promise();    
+            }
         })
+        .promise()
         .then(function (result) {
             console.log('Success YAY!')
             context.done(null, event);
         })
         .catch(function (err) {
             console.log(err);
+            context.done(err);
         });
 };
