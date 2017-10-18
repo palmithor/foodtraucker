@@ -23,7 +23,6 @@ provider:
 # you can overwrite defaults here
   stage: test
   region: eu-central-1
-  profile: foodtraucker
   versionFunctions: false # for now when we are experimenting
   environment:
     USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-users

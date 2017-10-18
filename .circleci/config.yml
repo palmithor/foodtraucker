@@ -111,9 +111,9 @@ jobs:
           name: deploy master or develop
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              serverless deploy --stage prod
+              serverless deploy --stage prod 
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              serverless deploy 
+              serverless deploy
             fi
 
   deploy_webapp:
