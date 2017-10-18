@@ -95,7 +95,9 @@ jobs:
 
       - run:
         name: install maven
-        command: sudo apt-get install maven
+        command: |
+          sudo apt-get update
+          sudo apt-get install maven
 
       - run:
           name: package backend
