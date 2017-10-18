@@ -94,6 +94,10 @@ jobs:
           command: npm install -g serverless
 
       - run:
+        name: install maven
+        command: sudo apt-get install maven
+
+      - run:
           name: package backend
           shell: /bin/sh
           command: |
