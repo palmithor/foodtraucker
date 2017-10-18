@@ -112,7 +112,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               serverless deploy --stage prod 
-            else
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
               serverless deploy
             fi
 
