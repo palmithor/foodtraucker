@@ -94,7 +94,11 @@ jobs:
       - run:
           name: package backend
           working_directory: ~/repo
-          command: ./package_backend.sh
+          shell: /bin/sh
+          command: |
+            pwd
+            ls -a
+            sh package_backend.sh
 
       - deploy: 
           name: deploy master or develop
