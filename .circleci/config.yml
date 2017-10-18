@@ -99,7 +99,7 @@ jobs:
       
       - run:
           name: install maven
-          command: sudo apt-get install maven3
+          command: sudo apt-get install maven
 
       - run:
           name: package backend
