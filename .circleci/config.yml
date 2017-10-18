@@ -111,9 +111,9 @@ jobs:
           name: deploy master or develop
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              serverless deploy --stage prod --aws-profile default
+              serverless deploy --stage prod 
             else
-              serverless deploy --aws-profile default
+              serverless deploy
             fi
 
   deploy_webapp:
