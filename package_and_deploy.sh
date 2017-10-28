@@ -2,4 +2,4 @@
 
 sh package_backend.sh
 
-serverless deploy --profile foodtraucker
+serverless deploy --aws-profile foodtraucker
