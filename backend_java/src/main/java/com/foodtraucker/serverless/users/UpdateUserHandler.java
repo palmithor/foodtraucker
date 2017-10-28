@@ -4,19 +4,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.foodtraucker.serverless.ApiGatewayResponse;
+import com.foodtraucker.serverless.ApiGatewayProxyResponse;
+import com.foodtraucker.serverless.ApiGatewayRequest;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
-public class UpdateUserHandler implements RequestHandler<UserRequest, ApiGatewayResponse> {
+public class UpdateUserHandler implements RequestHandler<ApiGatewayRequest, ApiGatewayProxyResponse> {
 
 	private static final Logger LOG = Logger.getLogger(UpdateUserHandler.class);
 
 	@Override
-	public ApiGatewayResponse handleRequest(final UserRequest request, final Context context) {
+	public ApiGatewayProxyResponse handleRequest(final ApiGatewayRequest request, final Context context) {
 		LOG.info("received: " + request.toString());
-		return new ApiGatewayResponse(200, "", new HashMap<>(), false);
+		return new ApiGatewayProxyResponse(200,  new HashMap<>(), "{}");
 	}
 }

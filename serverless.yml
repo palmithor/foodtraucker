@@ -99,6 +99,20 @@ functions:
             parameters:
               paths:
                 id: true
+  javaCheckin:
+    runtime: java8
+    package:
+      artifact: backend_java/target/foodtraucker.jar
+    handler: com.foodtraucker.serverless.trucks.CheckinHandler
+    events:
+      - http:
+          path: foodtrucks/{id}/checkinjavatest
+          method: post
+          cors: true 
+          request:
+            parameters:
+              paths:
+                id: true
 
 resources:
   Resources:
