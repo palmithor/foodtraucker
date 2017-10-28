@@ -1,5 +1,7 @@
 package com.foodtraucker.serverless;
 
+import com.foodtraucker.serverless.trucks.CheckinRequest;
+
 import java.util.Map;
 
 /*
@@ -27,7 +29,7 @@ public class ApiGatewayRequest {
         return resource;
     }
 
-    public void setResource(String resource) {
+    public void setResource(final String resource) {
         this.resource = resource;
     }
 
@@ -35,7 +37,7 @@ public class ApiGatewayRequest {
         return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
@@ -43,7 +45,7 @@ public class ApiGatewayRequest {
         return httpMethod;
     }
 
-    public void setHttpMethod(String httpMethod) {
+    public void setHttpMethod(final String httpMethod) {
         this.httpMethod = httpMethod;
     }
 
@@ -51,7 +53,7 @@ public class ApiGatewayRequest {
         return headers;
     }
 
-    public void setHeaders(Map<String, String> headers) {
+    public void setHeaders(final Map<String, String> headers) {
         this.headers = headers;
     }
 
@@ -59,7 +61,7 @@ public class ApiGatewayRequest {
         return queryStringParameters;
     }
 
-    public void setQueryStringParameters(Map<String, String> queryStringParameters) {
+    public void setQueryStringParameters(final Map<String, String> queryStringParameters) {
         this.queryStringParameters = queryStringParameters;
     }
 
@@ -67,7 +69,7 @@ public class ApiGatewayRequest {
         return pathParameters;
     }
 
-    public void setPathParameters(Map<String, String> pathParameters) {
+    public void setPathParameters(final Map<String, String> pathParameters) {
         this.pathParameters = pathParameters;
     }
 
@@ -75,7 +77,7 @@ public class ApiGatewayRequest {
         return stageVariables;
     }
 
-    public void setStageVariables(Map<String, String> stageVariables) {
+    public void setStageVariables(final Map<String, String> stageVariables) {
         this.stageVariables = stageVariables;
     }
 
@@ -83,7 +85,7 @@ public class ApiGatewayRequest {
         return requestContext;
     }
 
-    public void setRequestContext(RequestContext requestContext) {
+    public void setRequestContext(final RequestContext requestContext) {
         this.requestContext = requestContext;
     }
 
@@ -91,7 +93,7 @@ public class ApiGatewayRequest {
         return body;
     }
 
-    public void setBody(String body) {
+    public void setBody(final String body) {
         this.body = body;
     }
 
@@ -99,7 +101,7 @@ public class ApiGatewayRequest {
         return isBase64Encoded;
     }
 
-    public void setBase64Encoded(boolean base64Encoded) {
+    public void setBase64Encoded(final boolean base64Encoded) {
         isBase64Encoded = base64Encoded;
     }
 

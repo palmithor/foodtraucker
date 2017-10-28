@@ -1,14 +1,14 @@
 package com.foodtraucker.serverless.trucks;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.foodtraucker.serverless.dynamo.TableEnvConstant;
 
 /**
  * @author palmithor
  * @since 26.10.2017.
  */
-@DynamoDBTable(tableName = "TABLE_TRUCKS")
+@DynamoDBTable(tableName = TableEnvConstant.TRUCKS_TABLE)
 public class Truck {
-    // new DynamoDBMapperConfig(new DynamoDBMapperConfig.TableNameOverride(tableName))
 
     private String id;
 
@@ -22,6 +22,5 @@ public class Truck {
         this.id = id;
     }
 
-    //@DynamoDBAttribute
 
 }

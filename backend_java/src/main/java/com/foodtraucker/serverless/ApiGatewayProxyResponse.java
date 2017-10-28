@@ -15,11 +15,17 @@ public class ApiGatewayProxyResponse {
     private Map<String, String> headers;
     private String body;
 
+    public ApiGatewayProxyResponse(final int statusCode, final Map<String, String> headers, final String body) {
+        this.statusCode = statusCode;
+        this.headers = headers;
+        this.body = body;
+    }
+
     public int getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(int statusCode) {
+    public void setStatusCode(final int statusCode) {
         this.statusCode = statusCode;
     }
 
@@ -27,7 +33,7 @@ public class ApiGatewayProxyResponse {
         return headers;
     }
 
-    public void setHeaders(Map<String, String> headers) {
+    public void setHeaders(final Map<String, String> headers) {
         this.headers = headers;
     }
 
@@ -35,13 +41,7 @@ public class ApiGatewayProxyResponse {
         return body;
     }
 
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public ApiGatewayProxyResponse(int statusCode, Map<String, String> headers, String body) {
-        this.statusCode = statusCode;
-        this.headers = headers;
+    public void setBody(final String body) {
         this.body = body;
     }
 }
