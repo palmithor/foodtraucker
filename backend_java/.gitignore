@@ -21,6 +21,7 @@ target
 
 # User-specific stuff:
 .idea
+.idea/*
 
 
 ## File-based project format:
