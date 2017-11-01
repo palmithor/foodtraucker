@@ -1,5 +1,6 @@
 package com.foodtraucker.serverless;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -11,13 +12,22 @@ import java.util.Map;
 
 public class ApiGatewayProxyResponse {
 
-    private int statusCode;
+    private Integer statusCode;
     private Map<String, String> headers;
     private String body;
+
+    public ApiGatewayProxyResponse() {
+    }
 
     public ApiGatewayProxyResponse(final int statusCode, final Map<String, String> headers, final String body) {
         this.statusCode = statusCode;
         this.headers = headers;
+        this.body = body;
+    }
+
+    public ApiGatewayProxyResponse(final int statusCode, final String body) {
+        this.statusCode = statusCode;
+        this.headers = new HashMap<>();
         this.body = body;
     }
 

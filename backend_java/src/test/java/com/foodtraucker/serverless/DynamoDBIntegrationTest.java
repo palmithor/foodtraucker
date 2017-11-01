@@ -3,10 +3,7 @@ package com.foodtraucker.serverless;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.foodtraucker.serverless.dynamo.DynamoDBTestUtils;
 import com.foodtraucker.serverless.dynamo.TableEnvConstant;
-import com.foodtraucker.serverless.trucks.CheckinHandler;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -19,24 +16,25 @@ public abstract class DynamoDBIntegrationTest {
 
     @ClassRule public static final LocalDynamoDBCreationRule DYNAMO_DB = new LocalDynamoDBCreationRule();
 
-    private DynamoDBTestUtils dynamoDBTestUtils;
+    public static DynamoDBTestUtils dynamoDBTestUtils;
 
     static {
-        System.setProperty(TableEnvConstant.TRUCKS_TABLE, "TRUCKS");
+        System.setProperty(TableEnvConstant.TRUCKS_TABLE, "FOODTRUCKS");
         System.setProperty(TableEnvConstant.CHECKINS_TABLE, "CHECKINS");
+        System.setProperty(TableEnvConstant.FOODTRUCK_USERS_TABLE, "FOODTRUCK_USERS");
     }
 
-    private AmazonDynamoDB dynamoDB;
+    private static AmazonDynamoDB dynamoDB;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void beforeClass() throws Exception {
         dynamoDB = DYNAMO_DB.getAmazonDynamoDB();
         dynamoDBTestUtils = new DynamoDBTestUtils(dynamoDB);
         dynamoDBTestUtils.createSchema();
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterClass
+    public static void afterClass() throws Exception {
         dynamoDB.shutdown();
     }
 

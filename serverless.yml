@@ -27,7 +27,8 @@ provider:
   environment:
     USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-users
     TRUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-trucks
-    TRUCK_CHECKINS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-truck_checkins
+    FOODTRUCK_CHECKINS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-checkins
+    FOODTRUCK_USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-users
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -40,7 +41,11 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:*
-      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRUCK_CHECKINS_TABLE}
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_USERS_TABLE}      
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_CHECKINS_TABLE}
     - Effect: Allow
       Action: 
         - dynamodb:ListTables
@@ -120,11 +125,15 @@ resources:
       Properties:
         TableName: ${self:provider.environment.USERS_TABLE}
         AttributeDefinitions:
+          - AttributeName: cognito_id
+            AttributeType: S
           - AttributeName: email
             AttributeType: S
         KeySchema:
-          - AttributeName: email
+          - AttributeName: cognito_id
             KeyType: HASH
+          - AttributeName: email
+            KeyType: RANGE            
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1
@@ -141,10 +150,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1
-    TruckCheckinsTableDynamoDB:
+    FoodtruckCheckinsTableDynamoDB:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TRUCK_CHECKINS_TABLE}
+        TableName: ${self:provider.environment.FOODTRUCK_CHECKINS_TABLE}
         AttributeDefinitions:
           - AttributeName: foodtruck_id
             AttributeType: S
@@ -154,6 +163,23 @@ resources:
           - AttributeName: foodtruck_id
             KeyType: HASH
           - AttributeName: id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits:  1
+          WriteCapacityUnits: 1
+    FoodtruckUsersTableDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.FOODTRUCK_USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: foodtruck_id
+            AttributeType: S
+          - AttributeName: cognito_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: cognito_id
+            KeyType: HASH
+          - AttributeName: foodtruck_id
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits:  1

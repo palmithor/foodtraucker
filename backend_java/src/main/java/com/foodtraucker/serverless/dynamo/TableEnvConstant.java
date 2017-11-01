@@ -9,7 +9,8 @@ package com.foodtraucker.serverless.dynamo;
 public class TableEnvConstant {
 
     public static final String TRUCKS_TABLE = "TRUCKS_TABLE";
-    public static final String CHECKINS_TABLE = "TRUCK_CHECKINS_TABLE";
+    public static final String CHECKINS_TABLE = "FOODTRUCK_CHECKINS_TABLE";
+    public static final String FOODTRUCK_USERS_TABLE = "FOODTRUCK_USERS_TABLE";
 
     private TableEnvConstant() {
 

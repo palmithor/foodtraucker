@@ -5,7 +5,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.foodtraucker.serverless.trucks.Checkin;
-import com.foodtraucker.serverless.trucks.Truck;
+import com.foodtraucker.serverless.trucks.FoodtruckUser;
+import com.foodtraucker.serverless.trucks.Foodtruck;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -27,10 +28,20 @@ public class DynamoDBTestUtils {
 
     public void createSchema() {
         final CreateTableRequest checkinCreateTableRequest = dynamoDBMapper.generateCreateTableRequest(Checkin.class, DynamoDBUtils.getCheckinsMapperConfig());
-        final CreateTableRequest truckCreateTableRequest = dynamoDBMapper.generateCreateTableRequest(Truck.class, DynamoDBUtils.getCheckinsMapperConfig());
-        setProvisionedThroughput(checkinCreateTableRequest, truckCreateTableRequest);
-        dynamoDB.createTable(truckCreateTableRequest);
+        final CreateTableRequest foodtruckCreateTableRequest = dynamoDBMapper.generateCreateTableRequest(Foodtruck.class, DynamoDBUtils.getCheckinsMapperConfig());
+        final CreateTableRequest foodtruckUserCreateTableRequest = dynamoDBMapper.generateCreateTableRequest(FoodtruckUser.class, DynamoDBUtils.getFoodtruckUsersMapperConfig());
+        setProvisionedThroughput(checkinCreateTableRequest, foodtruckCreateTableRequest, foodtruckUserCreateTableRequest);
+        dynamoDB.createTable(foodtruckCreateTableRequest);
         dynamoDB.createTable(checkinCreateTableRequest);
+        dynamoDB.createTable(foodtruckUserCreateTableRequest);
+    }
+
+    public AmazonDynamoDB getDynamoDB() {
+        return dynamoDB;
+    }
+
+    public DynamoDBMapper getDynamoDBMapper() {
+        return dynamoDBMapper;
     }
 
     private void setProvisionedThroughput(final CreateTableRequest... requests) {

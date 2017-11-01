@@ -13,11 +13,17 @@ module.exports.signup = function (event, context) {
     return dynamodb.putItem({
             "TableName": userTableName,
             "Item": {
+                "cognito_id": {
+                    "S": event.request.userAttributes.sub
+                },
                 "email": {
                     "S": event.request.userAttributes.email
                 },
+                "updated": {
+                    "N": datetime
+                },
                 "created": {
-                    "S": datetime
+                    "N": datetime
                 }
             }
         })

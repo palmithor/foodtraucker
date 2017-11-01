@@ -1,8 +1,6 @@
 package com.foodtraucker.serverless.dynamo;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
-import com.foodtraucker.serverless.trucks.Checkin;
-import com.foodtraucker.serverless.trucks.Truck;
 
 /**
  * @author palmithor
@@ -15,7 +13,7 @@ public class DynamoDBUtils {
     }
 
 
-    public static DynamoDBMapperConfig getTrucksMapperConfig() {
+    public static DynamoDBMapperConfig getFoodtrucksMapperConfig() {
         return getMapperConfig(TableEnvConstant.TRUCKS_TABLE);
     }
 
@@ -23,10 +21,16 @@ public class DynamoDBUtils {
         return getMapperConfig(TableEnvConstant.CHECKINS_TABLE);
     }
 
+    public static DynamoDBMapperConfig getFoodtruckUsersMapperConfig() {
+        return getMapperConfig(TableEnvConstant.FOODTRUCK_USERS_TABLE);
+    }
+
     private static DynamoDBMapperConfig getMapperConfig(final String envTableKey) {
         return DynamoDBMapperConfig.builder()
                 .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride.withTableNameReplacement(System.getenv(envTableKey)))
                 .build();
     }
+
+
 
 }

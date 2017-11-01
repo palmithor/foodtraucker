@@ -7,6 +7,7 @@ public class RequestContext {
     private String stage;
     private String requestId;
     private Identity identity;
+    private Authorizer authorizer;
     private String resourcePath;
     private String httpMethod;
     private String apiId;
@@ -75,4 +76,11 @@ public class RequestContext {
         this.apiId = apiId;
     }
 
+    public Authorizer getAuthorizer() {
+        return authorizer;
+    }
+
+    public void setAuthorizer(final Authorizer authorizer) {
+        this.authorizer = authorizer;
+    }
 }

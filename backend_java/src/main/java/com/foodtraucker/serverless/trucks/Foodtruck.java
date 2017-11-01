@@ -8,7 +8,7 @@ import com.foodtraucker.serverless.dynamo.TableEnvConstant;
  * @since 26.10.2017.
  */
 @DynamoDBTable(tableName = TableEnvConstant.TRUCKS_TABLE)
-public class Truck {
+public class Foodtruck {
 
     private String id;
 
