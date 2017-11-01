@@ -69,24 +69,6 @@ functions:
     package:
       artifact: backend_node.zip
     handler: auth.signup
-  checkin:
-    environment:
-      NODE_ENV: ${opt:stage, self:provider.stage}
-    runtime: nodejs6.10
-    package:
-      artifact: backend_node.zip
-    handler: foodtrucks.checkin
-    events:
-      - http:
-          path: foodtrucks/{id}/checkins
-          method: post
-          cors: true
-          authorizer:
-            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}          
-          request:
-            parameters:
-              paths:
-                id: true
   updateUser:
     runtime: java8
     package:
@@ -103,14 +85,14 @@ functions:
             parameters:
               paths:
                 id: true
-  javaCheckin:
+  checkin:
     runtime: java8
     package:
       artifact: backend_java/target/foodtraucker.jar
     handler: com.foodtraucker.serverless.trucks.CheckinHandler
     events:
       - http:
-          path: foodtrucks/{id}/checkinjavatest
+          path: foodtrucks/{id}/checkins
           method: post
           cors: true 
           request:
