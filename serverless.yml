@@ -99,7 +99,21 @@ functions:
             parameters:
               paths:
                 id: true
-
+  checkinStream:
+    runtime: java8
+    package:
+      artifact: backend_java/target/foodtraucker.jar
+    handler: com.foodtraucker.serverless.trucks.CheckinStreamHandler
+    timeout: 120
+    events: 
+      - stream:
+          type: dynamodb
+          batchSize: 20
+          startingPosition: TRIM_HORIZON
+          arn:
+            Fn::GetAtt:
+              - FoodtruckCheckinsTableDynamoDB
+              - StreamArn
 resources:
   Resources:
     UserTableDynamoDB:
@@ -149,6 +163,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
     FoodtruckUsersTableDynamoDB:
       Type: AWS::DynamoDB::Table
       Properties:
