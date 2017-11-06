@@ -15,6 +15,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "font-awesome": "^4.7.0",
     "materialize-css": "^0.100.2",
     "vee-validate": "^2.0.0-rc.21",
     "vue": "^2.4.2",
