@@ -28,6 +28,16 @@ const actions = {
       .catch((err) => {
         context.commit('setError', err)
       })
+  },
+  signUp (context, data) {
+    context.commit('setLoading')
+    AuthService.signUp(data.email, data.password)
+      .then((result) => {
+        // TODO show message that an email has been sent
+      })
+      .catch((err) => {
+        context.commit('setError', err)
+      })
   }
 }
 

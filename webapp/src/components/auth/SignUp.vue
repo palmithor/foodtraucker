@@ -8,16 +8,18 @@
       </div>
       <div>
         <label for="password">Password</label>
-        <input v-validate="{required: true, email: true}" v-model="user.password" name="password" type="password"
+        <input v-validate="{required: true}" v-model="user.password" name="password" type="password"
                id="password" placeholder="Password">
+      </div>
+      <div>
+        <label for="password-confirm">Confirm Password</label>
+        <input v-validate="{required: true, confirmed: 'password'}"
+               name="Confirm Password" type="password"
+               id="password-confirm" placeholder="Password">
       </div>
       <button @click.prevent="submit()" type="submit" class="btn btn-primary">Submit</button>
     </form>
-    <p>Is loading: {{ isLoading }}</p>
-    <p>Is authenticated: {{ isAuthenticated }}</p>
-    <span v-show="errors.has('email')">{{ errors.first('email') }}</span>
     <p>{{ errors }}</p>
-    <p>{{ serviceError }}</p>
   </div>
 </template>
 
@@ -35,16 +37,15 @@
       },
       serviceError () {
         return this.$store.state.session.error
-      },
-      isAuthenticated () {
-        return this.$store.getters.isAuthenticated
       }
     },
     methods: {
       submit () {
+        console.log('before validate')
         this.$validator.validateAll().then((result) => {
           if (result) {
-            this.$store.dispatch('login', {email: this.user.email, password: this.user.password})
+            this.$store.dispatch('signUp', {email: this.user.email, password: this.user.password})
+            console.log('before validate')
           }
         })
       }
