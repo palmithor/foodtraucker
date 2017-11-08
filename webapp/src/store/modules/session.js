@@ -22,12 +22,8 @@ const actions = {
   login (context, data) {
     context.commit('setLoading')
     AuthService.login(data.email, data.password)
-      .then((result) => {
-        context.commit('initSession', result)
-      })
-      .catch((err) => {
-        context.commit('setError', err)
-      })
+      .then((result) => context.commit('initSession', result))
+      .catch((err) => context.commit('setError', err))
   },
   signUp (context, data) {
     context.commit('setLoading')
