@@ -41,7 +41,7 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:*
-      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_USERS_TABLE}      
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_USERS_TABLE}
     - Effect: Allow
       Action:
         - dynamodb:*
@@ -94,7 +94,7 @@ functions:
       - http:
           path: foodtrucks/{id}/checkins
           method: post
-          cors: true 
+          cors: true
           request:
             parameters:
               paths:
@@ -105,7 +105,7 @@ functions:
       artifact: backend_java/target/foodtraucker.jar
     handler: com.foodtraucker.serverless.trucks.CheckinStreamHandler
     timeout: 120
-    events: 
+    events:
       - stream:
           type: dynamodb
           batchSize: 20
@@ -129,7 +129,7 @@ resources:
           - AttributeName: cognito_id
             KeyType: HASH
           - AttributeName: email
-            KeyType: RANGE            
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1
@@ -138,7 +138,7 @@ resources:
       Properties:
         TableName: ${self:provider.environment.TRUCKS_TABLE}
         AttributeDefinitions:
-          - AttributeName: id 
+          - AttributeName: id
             AttributeType: S
         KeySchema:
           - AttributeName: id
