@@ -3,12 +3,12 @@
     <form>
       <div>
         <label for="email">Email address</label>
-        <input v-validate="{required: true, email: true}" v-model="user.email" name="email" type="email" id="email"
+        <input v-validate="{required: true, email: true}" v-model="user.email" name="Email" type="email" id="email"
                aria-describedby="emailHelp" placeholder="Enter email">
       </div>
       <div>
         <label for="password">Password</label>
-        <input v-validate="{required: true, email: true}" v-model="user.password" name="password" type="password"
+        <input v-validate="{required: true}" v-model="user.password" name="Password" type="password"
                id="password" placeholder="Password">
       </div>
       <button @click.prevent="submit()" type="submit" class="btn btn-primary">Submit</button>
