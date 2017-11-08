@@ -32,10 +32,6 @@ function signUp (email, password) {
 
   return new Promise((resolve, reject) =>
     AwsProfile.userPool.signUp(email, password, attributeList, null, (err, result) => {
-<<<<<<< HEAD
-      console.log(JSON.stringify(err))
-=======
->>>>>>> feature/webapp_auth
       if (err) reject(err)
       if (result) resolve(result)
     })
