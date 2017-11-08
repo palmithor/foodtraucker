@@ -2,7 +2,7 @@ import { CognitoUserPool } from 'amazon-cognito-identity-js'
 import * as AWS from 'aws-sdk/global'
 
 const REGION = process.env.AWS_REGION
-// const IDENTITY_POOL_ID = process.env.IDENTITY_POOL_ID
+const identityPoolId = process.env.IDENTITY_POOL_ID
 
 AWS.config.update({
   region: REGION
@@ -14,5 +14,6 @@ const userPool = new CognitoUserPool({
 })
 
 export default {
-  userPool
+  userPool,
+  identityPoolId
 }
