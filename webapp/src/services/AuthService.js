@@ -32,7 +32,10 @@ function signUp (email, password) {
 
   return new Promise((resolve, reject) =>
     AwsProfile.userPool.signUp(email, password, attributeList, null, (err, result) => {
+<<<<<<< HEAD
       console.log(JSON.stringify(err))
+=======
+>>>>>>> feature/webapp_auth
       if (err) reject(err)
       if (result) resolve(result)
     })
@@ -65,9 +68,39 @@ function confirmPassword (email, code, newPassword) {
   })
 }
 
+function verifyUser (email, confirmationCode) {
+  const cognitoUser = new CognitoUser({
+    Pool: AwsProfile.userPool,
+    Username: email
+  })
+
+  return new Promise((resolve, reject) => {
+    cognitoUser.confirmPassword(confirmationCode, true, (err, result) => {
+      if (err) reject(err)
+      if (result) resolve(result)
+    })
+  })
+}
+
+function resendConfirmationCode (email) {
+  const cognitoUser = new CognitoUser({
+    Pool: AwsProfile.userPool,
+    Username: email
+  })
+
+  return new Promise((resolve, reject) => {
+    cognitoUser.resendConfirmationCode((err, result) => {
+      if (err) reject(err)
+      if (result) resolve(result)
+    })
+  })
+}
+
 export default {
   signUp,
   login,
   forgotPassword,
-  confirmPassword
+  confirmPassword,
+  verifyUser,
+  resendConfirmationCode
 }
