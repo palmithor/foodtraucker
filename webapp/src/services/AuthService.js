@@ -78,10 +78,25 @@ function verifyUser (email, confirmationCode) {
   })
 }
 
+function resendConfirmationCode (email) {
+  const cognitoUser = new CognitoUser({
+    Pool: AwsProfile.userPool,
+    Username: email
+  })
+
+  return new Promise((resolve, reject) => {
+    cognitoUser.resendConfirmationCode((err, result) => {
+      if (err) reject(err)
+      if (result) resolve(result)
+    })
+  })
+}
+
 export default {
   signUp,
   login,
   forgotPassword,
   confirmPassword,
-  verifyUser
+  verifyUser,
+  resendConfirmationCode
 }
