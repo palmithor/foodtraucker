@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='page'>
     <app-nav-bar/>
     <div>
       <router-view/>
@@ -18,4 +18,13 @@
 </script>
 
 <style>
+  body {
+    margin: 0;
+  }
+  .page {
+    height: 100vh;
+    width: 100vw;
+    background: url(assets/background.png) no-repeat;
+    background-size: 100% 100%;
+  }
 </style>

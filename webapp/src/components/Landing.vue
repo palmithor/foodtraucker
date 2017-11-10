@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p>This is home landing page</p>
   </div>
 </template>
 
