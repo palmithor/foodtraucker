@@ -11,6 +11,7 @@ public class TableEnvConstant {
     public static final String TRUCKS_TABLE = "TRUCKS_TABLE";
     public static final String CHECKINS_TABLE = "FOODTRUCK_CHECKINS_TABLE";
     public static final String FOODTRUCK_USERS_TABLE = "FOODTRUCK_USERS_TABLE";
+    public static final String FOODTRUCK_MENUS_TABLE = "FOODTRUCK_MENUS_TABLE";
 
     private TableEnvConstant() {
 
