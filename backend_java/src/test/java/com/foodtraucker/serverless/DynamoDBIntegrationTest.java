@@ -22,6 +22,7 @@ public abstract class DynamoDBIntegrationTest {
         System.setProperty(TableEnvConstant.TRUCKS_TABLE, "FOODTRUCKS");
         System.setProperty(TableEnvConstant.CHECKINS_TABLE, "CHECKINS");
         System.setProperty(TableEnvConstant.FOODTRUCK_USERS_TABLE, "FOODTRUCK_USERS");
+        System.setProperty(TableEnvConstant.FOODTRUCK_MENUS_TABLE, "FOODTRUCK_MENUS");
     }
 
     private static AmazonDynamoDB dynamoDB;

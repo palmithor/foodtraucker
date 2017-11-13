@@ -29,6 +29,7 @@ provider:
     TRUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-trucks
     FOODTRUCK_CHECKINS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-checkins
     FOODTRUCK_USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-users
+    FOODTRUCK_MENUS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-menus
   iamRoleStatements:
     - Effect: Allow
       Action:
