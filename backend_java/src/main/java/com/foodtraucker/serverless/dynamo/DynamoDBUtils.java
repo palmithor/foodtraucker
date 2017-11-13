@@ -25,6 +25,10 @@ public class DynamoDBUtils {
         return getMapperConfig(TableEnvConstant.FOODTRUCK_USERS_TABLE);
     }
 
+    public static DynamoDBMapperConfig getFoodtruckMenusMapperConfig() {
+        return getMapperConfig(TableEnvConstant.FOODTRUCK_MENUS_TABLE);
+    }
+
     private static DynamoDBMapperConfig getMapperConfig(final String envTableKey) {
         return DynamoDBMapperConfig.builder()
                 .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride.withTableNameReplacement(System.getenv(envTableKey)))
