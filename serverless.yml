@@ -30,6 +30,17 @@ provider:
     FOODTRUCK_CHECKINS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-checkins
     FOODTRUCK_USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-users
   iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:DescribeStream
+        - dynamodb:ListStreams
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_CHECKINS_TABLE}/stream/*
+    - Effect: "Allow"
+      Action:
+        - "es:*"
+      Resource: "*"
     - Effect: Allow
       Action:
         - dynamodb:*
@@ -49,7 +60,7 @@ provider:
     - Effect: Allow
       Action: 
         - dynamodb:ListTables
-      Resource: "*"
+      Resource: "*"    
 
 custom:
   stages:
@@ -100,11 +111,12 @@ functions:
               paths:
                 id: true
   checkinStream:
-    runtime: java8
+    runtime: nodejs6.10
     package:
-      artifact: backend_java/target/foodtraucker.jar
-    handler: com.foodtraucker.serverless.trucks.CheckinStreamHandler
-    timeout: 120
+      artifact: backend_node.zip
+    environment:
+      NODE_ENV: ${opt:stage, self:provider.stage}
+    handler: checkin.streamCheckin
     events:
       - stream:
           type: dynamodb
