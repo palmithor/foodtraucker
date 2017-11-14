@@ -82,7 +82,7 @@ jobs:
   
   deploy_backend:
     docker:
-      - image: webpackcontrib/circleci-node-jdk8
+      - image: jimador/docker-jdk-8-maven-node
     
     working_directory: ~/repo
 
@@ -133,7 +133,7 @@ jobs:
           working_directory: ~/repo/webapp
           command: npm install
 
-      - save_cache:
+      - save_cache:s
           key: dependency-cache-{{ checksum "webapp/package.json" }}
           paths:
             - webapp/node_modules
