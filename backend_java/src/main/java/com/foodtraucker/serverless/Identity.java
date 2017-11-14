@@ -101,5 +101,4 @@ public class Identity {
     public void setUser(String user) {
         this.user = user;
     }
-
 }

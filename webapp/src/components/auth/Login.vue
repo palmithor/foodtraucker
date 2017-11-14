@@ -18,6 +18,7 @@
     <span v-show="errors.has('email')">{{ errors.first('email') }}</span>
     <p>{{ errors }}</p>
     <p>{{ serviceError }}</p>
+    <p>{{ session }}</p>
   </div>
 </template>
 
@@ -35,6 +36,9 @@
       },
       serviceError () {
         return this.$store.state.session.error
+      },
+      session () {
+        return this.$store.state.session.session
       },
       isAuthenticated () {
         return this.$store.getters.isAuthenticated

@@ -106,6 +106,8 @@ functions:
           path: foodtrucks/{id}/checkins
           method: post
           cors: true
+          authorizer:
+            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
           request:
             parameters:
               paths:
@@ -116,7 +118,7 @@ functions:
       artifact: backend_node.zip
     environment:
       NODE_ENV: ${opt:stage, self:provider.stage}
-    handler: checkin.streamCheckin
+    handler: checkin.checkinStream
     events:
       - stream:
           type: dynamodb

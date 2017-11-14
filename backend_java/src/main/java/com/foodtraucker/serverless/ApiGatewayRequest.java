@@ -104,5 +104,4 @@ public class ApiGatewayRequest {
     public void setBase64Encoded(final boolean base64Encoded) {
         isBase64Encoded = base64Encoded;
     }
-
 }
