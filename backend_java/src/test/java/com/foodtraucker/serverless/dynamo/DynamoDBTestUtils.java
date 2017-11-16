@@ -28,16 +28,11 @@ public class DynamoDBTestUtils {
     }
 
     public void createSchema() {
-        final CreateTableRequest checkinCreateTableRequest = dynamoDBMapper.generateCreateTableRequest(Checkin.class, DynamoDBUtils.getCheckinsMapperConfig());
-        final CreateTableRequest foodtruckCreateTableRequest = dynamoDBMapper.generateCreateTableRequest(Foodtruck.class, DynamoDBUtils.getCheckinsMapperConfig());
-        final CreateTableRequest foodtruckUserCreateTableRequest = dynamoDBMapper.generateCreateTableRequest(FoodtruckUser.class, DynamoDBUtils.getFoodtruckUsersMapperConfig());
-        final CreateTableRequest foodtruckMenuCreateTableRquest = dynamoDBMapper.generateCreateTableRequest(FoodtruckMenu.class, DynamoDBUtils.getFoodtruckMenusMapperConfig());
-        setProvisionedThroughput(checkinCreateTableRequest, foodtruckCreateTableRequest, foodtruckUserCreateTableRequest,
-                foodtruckMenuCreateTableRquest);
-        dynamoDB.createTable(foodtruckCreateTableRequest);
-        dynamoDB.createTable(checkinCreateTableRequest);
-        dynamoDB.createTable(foodtruckUserCreateTableRequest);
-        dynamoDB.createTable(foodtruckMenuCreateTableRquest);
+        Arrays.asList(DynamoDBTable.values()).forEach(table -> {
+            final CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(table.getClazz(), table.getMapperConfig());
+            setProvisionedThroughput(createTableRequest);
+            dynamoDB.createTable(createTableRequest);
+        });
     }
 
     public AmazonDynamoDB getDynamoDB() {
@@ -48,15 +43,11 @@ public class DynamoDBTestUtils {
         return dynamoDBMapper;
     }
 
-    private void setProvisionedThroughput(final CreateTableRequest... requests) {
+    private void setProvisionedThroughput(CreateTableRequest request) {
         final ProvisionedThroughput provisionedThroughput = new ProvisionedThroughput(5L, 5L);
-
-        Arrays.asList(requests).forEach(request -> {
-            request.setProvisionedThroughput(provisionedThroughput);
-            Optional.ofNullable(request.getGlobalSecondaryIndexes())
-                    .ifPresent(globalSecondaryIndices -> globalSecondaryIndices
-                            .forEach(v -> v.setProvisionedThroughput(provisionedThroughput)));
-        });
+        request.setProvisionedThroughput(provisionedThroughput);
+        Optional.ofNullable(request.getGlobalSecondaryIndexes())
+                .ifPresent(globalSecondaryIndices -> globalSecondaryIndices
+                        .forEach(v -> v.setProvisionedThroughput(provisionedThroughput)));
     }
-
 }
