@@ -22,11 +22,12 @@ public class FoodtruckMenuDao {
 
     }
 
-    public void create(final String foodtruckId, final AddMenuRequest addMenuRequest) {
+    public FoodtruckMenu create(final String foodtruckId, final AddMenuRequest addMenuRequest) {
         final FoodtruckMenu foodtruckMenu = new FoodtruckMenu();
         foodtruckMenu.setFoodtruckId(foodtruckId);
         foodtruckMenu.setName(addMenuRequest.getName());
         foodtruckMenu.setDescription(addMenuRequest.getDescription());
         dynamoDBMapper.save(foodtruckMenu, DynamoDBUtils.getFoodtruckMenusMapperConfig());
+        return foodtruckMenu;
     }
 }

@@ -119,6 +119,20 @@ functions:
             Fn::GetAtt:
               - FoodtruckCheckinsTableDynamoDB
               - StreamArn
+  addMenu:
+    runtime: java8
+    package:
+      artifact: backend_java/target/foodtraucker.jar
+    handler: com.foodtraucker.serverless.menus.AddFoodtruckMenuHandler
+    events:
+      - http:
+          path: foodtrucks/{id}/menus
+          method: post
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
 resources:
   Resources:
     UserTableDynamoDB:

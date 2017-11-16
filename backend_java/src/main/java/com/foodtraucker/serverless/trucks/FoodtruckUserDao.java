@@ -14,15 +14,15 @@ import java.util.Map;
  * @author palmithor
  * @since 2017-10-31
  */
-class FoodtruckUserDao {
+public class FoodtruckUserDao {
 
     private final DynamoDBMapper dynamoDBMapper;
 
-    FoodtruckUserDao(final DynamoDBMapper dynamoDBMapper) {
+    public FoodtruckUserDao(final DynamoDBMapper dynamoDBMapper) {
         this.dynamoDBMapper = dynamoDBMapper;
     }
 
-    List<FoodtruckUser> findByCognitoId(final String cognitoId) {
+    public List<FoodtruckUser> findByCognitoId(final String cognitoId) {
         Map<String, String> expressionAttributesNames = new HashMap<>();
         expressionAttributesNames.put("#cognitoId", "cognito_id");
 
