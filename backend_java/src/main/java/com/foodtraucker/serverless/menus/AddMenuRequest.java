@@ -25,6 +25,10 @@ public class AddMenuRequest {
         this.description = description;
     }
 
+    public static Builder createBuilder() {
+        return new Builder();
+    }
+
     public static final class Builder {
         private String name;
         private String description;

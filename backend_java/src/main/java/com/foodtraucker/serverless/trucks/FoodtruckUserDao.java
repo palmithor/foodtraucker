@@ -37,7 +37,7 @@ public class FoodtruckUserDao {
         return dynamoDBMapper.query(FoodtruckUser.class, queryExpression, DynamoDBUtils.getFoodtruckUsersMapperConfig());
     }
 
-    FoodtruckUser create(final String cognitoId, final String foodtruckId, final String role) {
+    public FoodtruckUser create(final String cognitoId, final String foodtruckId, final String role) {
         final long now = Instant.now().toEpochMilli();
         final FoodtruckUser foodtruckUser = new FoodtruckUser();
         foodtruckUser.setCognitoId(cognitoId);
