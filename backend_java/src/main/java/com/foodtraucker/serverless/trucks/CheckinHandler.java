@@ -12,6 +12,7 @@ import com.foodtraucker.serverless.common.ErrorResponse;
 
 import com.foodtraucker.serverless.common.PathParamConstant;
 import com.foodtraucker.serverless.utils.JsonUtils;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import javax.validation.*;
@@ -50,7 +51,6 @@ public class CheckinHandler implements RequestHandler<ApiGatewayRequest, ApiGate
     public ApiGatewayProxyResponse handleRequest(final ApiGatewayRequest request, final Context context) {
         final CheckinRequest checkinRequest = JsonUtils.fromJson(request.getBody(), CheckinRequest.class).orElse(new CheckinRequest());
         final Optional<Set<ConstraintViolation<CheckinRequest>>> validationErrorOptional = validateRequest(checkinRequest);
-
         // Request is invalid
         if (validationErrorOptional.isPresent()) {
             final ErrorResponse errorResponse = ErrorResponse.badRequest().addFieldViolation(validationErrorOptional.get()).build();

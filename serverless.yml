@@ -31,6 +31,17 @@ provider:
     FOODTRUCK_USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-users
     FOODTRUCK_MENUS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-menus
   iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:DescribeStream
+        - dynamodb:ListStreams
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_CHECKINS_TABLE}/stream/*
+    - Effect: "Allow"
+      Action:
+        - "es:*"
+      Resource: "*"
     - Effect: Allow
       Action:
         - dynamodb:*
@@ -42,7 +53,7 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:*
-      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_USERS_TABLE}      
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_USERS_TABLE}
     - Effect: Allow
       Action:
         - dynamodb:*
@@ -54,7 +65,7 @@ provider:
     - Effect: Allow
       Action: 
         - dynamodb:ListTables
-      Resource: "*"
+      Resource: "*"    
 
 custom:
   stages:
@@ -99,18 +110,21 @@ functions:
       - http:
           path: foodtrucks/{id}/checkins
           method: post
-          cors: true 
+          cors: true
+          authorizer:
+            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
           request:
             parameters:
               paths:
                 id: true
   checkinStream:
-    runtime: java8
+    runtime: nodejs6.10
     package:
-      artifact: backend_java/target/foodtraucker.jar
-    handler: com.foodtraucker.serverless.trucks.CheckinStreamHandler
-    timeout: 120
-    events: 
+      artifact: backend_node.zip
+    environment:
+      NODE_ENV: ${opt:stage, self:provider.stage}
+    handler: checkin.checkinStream
+    events:
       - stream:
           type: dynamodb
           batchSize: 20
@@ -148,7 +162,7 @@ resources:
           - AttributeName: cognito_id
             KeyType: HASH
           - AttributeName: email
-            KeyType: RANGE            
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1
@@ -157,7 +171,7 @@ resources:
       Properties:
         TableName: ${self:provider.environment.TRUCKS_TABLE}
         AttributeDefinitions:
-          - AttributeName: id 
+          - AttributeName: id
             AttributeType: S
         KeySchema:
           - AttributeName: id

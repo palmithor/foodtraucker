@@ -1,18 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Hello from '@/components/Hello'
+import Landing from '@/components/Landing'
+import Login from '@/components/auth/Login'
+import SignUp from '@/components/auth/SignUp'
 
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello,
-      props: (route) => ({appAwsCode: route.query.code})
+      name: 'Landing',
+      component: Landing
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/signup',
+      name: 'Sign Up',
+      component: SignUp
     }
   ]
 })

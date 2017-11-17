@@ -83,4 +83,5 @@ public class RequestContext {
     public void setAuthorizer(final Authorizer authorizer) {
         this.authorizer = authorizer;
     }
+
 }
