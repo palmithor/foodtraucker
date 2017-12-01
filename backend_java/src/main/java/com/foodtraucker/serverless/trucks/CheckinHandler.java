@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foodtraucker.serverless.ApiGatewayProxyResponse;
 import com.foodtraucker.serverless.ApiGatewayRequest;
+import com.foodtraucker.serverless.common.AbstractHandler;
 import com.foodtraucker.serverless.common.ErrorResponse;
 
 import com.foodtraucker.serverless.common.PathParamConstant;
@@ -23,63 +24,43 @@ import java.util.*;
  * @author palmithor
  * @since 26.10.2017.
  */
-public class CheckinHandler implements RequestHandler<ApiGatewayRequest, ApiGatewayProxyResponse> {
+public class CheckinHandler extends AbstractHandler implements RequestHandler<ApiGatewayRequest, ApiGatewayProxyResponse> {
 
     private static final Logger logger = Logger.getLogger(CheckinHandler.class);
     ;
-    private final Validator validator;
 
     private AmazonDynamoDB dynamoDB;
-    private ObjectMapper objectMapper;
 
     public CheckinHandler() {
+        super();
         this.dynamoDB = AmazonDynamoDBClientBuilder.defaultClient();
-        this.objectMapper = new ObjectMapper();
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
-
     }
 
     public CheckinHandler(final AmazonDynamoDB dynamoDB) {
+        super();
         this.dynamoDB = dynamoDB;
-        this.objectMapper = new ObjectMapper();
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
     }
 
     @Override
     public ApiGatewayProxyResponse handleRequest(final ApiGatewayRequest request, final Context context) {
         final CheckinRequest checkinRequest = JsonUtils.fromJson(request.getBody(), CheckinRequest.class).orElse(new CheckinRequest());
-        final Optional<Set<ConstraintViolation<CheckinRequest>>> validationErrorOptional = validateRequest(checkinRequest);
+        final Optional<Set<ConstraintViolation<CheckinRequest>>> validationErrors = validateRequest(checkinRequest);
         // Request is invalid
-        if (validationErrorOptional.isPresent()) {
-            final ErrorResponse errorResponse = ErrorResponse.badRequest().addFieldViolation(validationErrorOptional.get()).build();
-            return new ApiGatewayProxyResponse(errorResponse.getStatusCode(), JsonUtils.toJson(errorResponse));
+        if (validationErrors.isPresent()) {
+            return createBadRequestResponse(validationErrors.get());
         }
         final DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(dynamoDB);
-        final FoodtruckUserDao foodtruckUserDao = new FoodtruckUserDao(dynamoDBMapper);
-        final String foodtruckId = request.getPathParameters().get(PathParamConstant.ID);
-        final List<FoodtruckUser> foodtrucksByUser = foodtruckUserDao.findByCognitoId(request.getRequestContext().getAuthorizer().getClaims().getSub());
-        final Optional<FoodtruckUser> foodtruckUser = foodtrucksByUser.stream()
-                .filter(row -> row.getFoodtruckId().equals(foodtruckId)).findFirst();
+        final Optional<FoodtruckUser> foodtruckUser = getFoodtruckUser(request, dynamoDBMapper);
 
         // User does not have access to this foodtruck
         if (!foodtruckUser.isPresent()) {
-            final ErrorResponse errorResponse = ErrorResponse.forbidden().build();
-            return new ApiGatewayProxyResponse(errorResponse.getStatusCode(), JsonUtils.toJson(errorResponse));
+            return createForbiddenResponse();
         }
 
+        final String foodtruckId = foodtruckUser.get().getFoodtruckId();
         final CheckinDao checkinDao = new CheckinDao(dynamoDBMapper);
         final Checkin checkin = checkinDao.create(foodtruckId, checkinRequest);
-        return new ApiGatewayProxyResponse(200, JsonUtils.toJson(checkin));
-    }
 
-    private Optional<Set<ConstraintViolation<CheckinRequest>>> validateRequest(final CheckinRequest checkinRequest) {
-        Set<ConstraintViolation<CheckinRequest>> violations = validator.validate(checkinRequest);
-        if (violations.size() > 0) {
-            return Optional.of(violations);
-        }
-        return Optional.empty();
+        return createOkResponse(checkin);
     }
-
 }

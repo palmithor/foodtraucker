@@ -48,7 +48,6 @@ public class AddFoodtruckMenuHandler extends AbstractHandler implements RequestH
         final DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(dynamoDB);
         final Optional<FoodtruckUser> foodtruckUser = getFoodtruckUser(request, dynamoDBMapper);
 
-        // User does not have access to this foodtruck
         if (!foodtruckUser.isPresent()) {
             return createForbiddenResponse();
         }
