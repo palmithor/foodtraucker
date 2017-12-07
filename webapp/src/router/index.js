@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Landing from '@/components/Landing'
 import Login from '@/components/auth/Login'
 import SignUp from '@/components/auth/SignUp'
+import About from '@/components/about/About'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
       path: '/signup',
       name: 'Sign Up',
       component: SignUp
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: About
     }
   ]
 })
