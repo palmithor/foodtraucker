@@ -18,10 +18,16 @@
 </script>
 
 <style>
-  body {
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body, html {
     margin: 0;
   }
   .page {
+    position: relative;
     height: 100vh;
     width: 100vw;
     background: url(assets/background.png) no-repeat;
