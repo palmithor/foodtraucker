@@ -82,7 +82,7 @@ jobs:
   
   deploy_backend:
     docker:
-      - image: webpackcontrib/circleci-node-jdk8
+      - image: webpackcontrib/circleci-jdk9-node6
     
     working_directory: ~/repo
 
