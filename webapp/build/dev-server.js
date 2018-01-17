@@ -30,6 +30,8 @@ var devMiddleware = require('webpack-dev-middleware')(compiler, {
   quiet: true
 })
 
+console.log('PUBLIC PATH: ' + webpackConfig.output.publicPath)
+
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: false,
   heartbeat: 2000

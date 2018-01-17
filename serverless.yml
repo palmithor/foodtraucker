@@ -26,8 +26,22 @@ provider:
   versionFunctions: false # for now when we are experimenting
   environment:
     USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-users
-    TRAUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-traucks
+    TRUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-trucks
+    FOODTRUCK_CHECKINS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-checkins
+    FOODTRUCK_USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-users
+    FOODTRUCK_MENUS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-menus
   iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:DescribeStream
+        - dynamodb:ListStreams
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_CHECKINS_TABLE}/stream/*
+    - Effect: "Allow"
+      Action:
+        - "es:*"
+      Resource: "*"
     - Effect: Allow
       Action:
         - dynamodb:*
@@ -35,11 +49,23 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:*
-      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRAUCKS_TABLE}
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TRUCKS_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_USERS_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_CHECKINS_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.FOODTRUCK_MENUS_TABLE}
     - Effect: Allow
       Action: 
         - dynamodb:ListTables
-      Resource: "*"
+      Resource: "*"    
 
 custom:
   stages:
@@ -56,14 +82,9 @@ functions:
     environment:
       NODE_ENV: ${opt:stage, self:provider.stage}
     runtime: nodejs6.10
-    handler: auth.signup
     package:
       artifact: backend_node.zip
-    # Having this event here below unfortunately creates a user pool if the stack is setup from scratch
-    # events:
-    #  - cognitoUserPool:
-    #      pool: foodtraucker-${opt:stage, self:provider.stage}
-    #      trigger: PostConfirmation
+    handler: auth.signup
   updateUser:
     runtime: java8
     package:
@@ -73,13 +94,59 @@ functions:
       - http:
           path: users/{id}
           method: get
+          cors: true
           authorizer:
             arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
           request:
             parameters:
               paths:
                 id: true
-
+  checkin:
+    runtime: java8
+    package:
+      artifact: backend_java/target/foodtraucker.jar
+    handler: com.foodtraucker.serverless.trucks.CheckinHandler
+    events:
+      - http:
+          path: foodtrucks/{id}/checkins
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
+          request:
+            parameters:
+              paths:
+                id: true
+  checkinStream:
+    runtime: nodejs6.10
+    package:
+      artifact: backend_node.zip
+    environment:
+      NODE_ENV: ${opt:stage, self:provider.stage}
+    handler: checkin.checkinStream
+    events:
+      - stream:
+          type: dynamodb
+          batchSize: 20
+          startingPosition: TRIM_HORIZON
+          arn:
+            Fn::GetAtt:
+              - FoodtruckCheckinsTableDynamoDB
+              - StreamArn
+  addMenu:
+    runtime: java8
+    package:
+      artifact: backend_java/target/foodtraucker.jar
+    handler: com.foodtraucker.serverless.menus.AddFoodtruckMenuHandler
+    events:
+      - http:
+          path: foodtrucks/{id}/menus
+          method: post
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
 resources:
   Resources:
     UserTableDynamoDB:
@@ -99,12 +166,12 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1
-    TraucksTableDynamoDB:
+    TrucksTableDynamoDB:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TRAUCKS_TABLE}
+        TableName: ${self:provider.environment.TRUCKS_TABLE}
         AttributeDefinitions:
-          - AttributeName: id #GUID
+          - AttributeName: id
             AttributeType: S
         KeySchema:
           - AttributeName: id
@@ -112,3 +179,57 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1
+    FoodtruckCheckinsTableDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.FOODTRUCK_CHECKINS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: foodtruck_id
+            AttributeType: S
+          - AttributeName: id # GUID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: foodtruck_id
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits:  1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
+    FoodtruckUsersTableDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.FOODTRUCK_USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: foodtruck_id
+            AttributeType: S
+          - AttributeName: cognito_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: cognito_id
+            KeyType: HASH
+          - AttributeName: foodtruck_id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits:  1
+          WriteCapacityUnits: 1
+    FoodtruckMenusTableDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.FOODTRUCK_MENUS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: foodtruck_id
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: foodtruck_id
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits:  1
+          WriteCapacityUnits: 1
+
