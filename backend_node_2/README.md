@@ -1,2 +1,2 @@
-# CD Cognito
-This project is for creating user pool lambda triggers.
+# Foodtraucker Node Lambdas
+Yarn workspaces project which creates lambda deployment packages using webpack.
