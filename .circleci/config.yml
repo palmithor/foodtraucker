@@ -79,7 +79,46 @@ jobs:
           name: build app
           working_directory: ~/repo/webapp
           command: npm run build
-  
+
+  backend_node:
+    docker:
+      - image: webpackcontrib/circleci-node8
+      
+    
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      
+      - restore_cache:
+          key: dependency-cache-{{ checksum "backend_node_2/package.json" }}
+
+      - run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      - run:
+          name: Install yarn
+          command: sudo apt-get install --no-install-recommends yarn
+          
+      - run: 
+          name: Install dependencies
+          working_directory: ~/repo/backend_node_2
+          command: yarn install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "webapp/package.json" }}
+          paths:
+            - backend_node_2/node_modules
+      
+      - run: 
+          name: run tests
+          working_directory: ~/repo/backend_node_2
+          command: yarn test
+
+      - run: 
+          name: build app
+          working_directory: ~/repo/backend_node_2
+          command: yarn build
+
   deploy_backend:
     docker:
       - image: webpackcontrib/circleci-jdk9-node6
@@ -163,6 +202,7 @@ workflows:
   backend_and_frontend:
     jobs:
       - backend_java
+      - backend_node
       - webapp
       - deploy_webapp:
           requires: 
@@ -170,3 +210,4 @@ workflows:
       - deploy_backend:
           requires: 
             - backend_java
+            - backend_node

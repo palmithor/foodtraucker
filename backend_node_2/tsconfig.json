@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    // AWS uses Node 6, so we need to transpile to es2015 rather than es2017
+    "target": "es2015",
+    "module": "commonjs",
+    "lib": [
+      "es2015"
+    ],
+    "moduleResolution": "node",
+    "strict": true,
+    "pretty": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "preserveConstEnums": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "baseUrl": "./packages",
+  "paths": {
+    "@foodtraucker/*": ["./*/src"]
+  },
+  "exclude": [
+    "node_modules",
+    "./packages/*/dist"
+  ]
+}

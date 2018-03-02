@@ -78,13 +78,13 @@ package:
   individually: true
 
 functions:
-  signup:
+  cognito-post-confirmation:
     environment:
       NODE_ENV: ${opt:stage, self:provider.stage}
     runtime: nodejs6.10
     package:
-      artifact: backend_node.zip
-    handler: auth.signup
+      artifact: backend_node_2/packages/cognito-post-confirmation/dist.zip
+    handler: index.handler
   updateUser:
     runtime: java8
     package:
