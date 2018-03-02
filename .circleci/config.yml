@@ -201,8 +201,8 @@ workflows:
   version: 2
   backend_and_frontend:
     jobs:
-      - backend_java
       - backend_node
+      - backend_java
       - webapp
       - deploy_webapp:
           requires: 
