@@ -97,7 +97,7 @@ jobs:
       - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
       - run:
           name: Install yarn
-          command: sudo apt-get install --no-install-recommends yarn
+          command: sudo apt-get update && sudo apt-get install yarn
           
       - run: 
           name: Install dependencies
