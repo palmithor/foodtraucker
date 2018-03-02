@@ -110,14 +110,14 @@ jobs:
             - backend_node_2/node_modules
       
       - run: 
-          name: run tests
-          working_directory: ~/repo/backend_node_2
-          command: yarn test
-
-      - run: 
           name: build app
           working_directory: ~/repo/backend_node_2
           command: yarn build
+
+      - run: 
+          name: run tests
+          working_directory: ~/repo/backend_node_2
+          command: yarn test
 
   deploy_backend:
     docker:
