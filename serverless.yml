@@ -120,7 +120,7 @@ functions:
   checkin-stream:
     runtime: nodejs6.10
     package:
-      artifact: backend_node_2/packages/foodtraucker-checkin/dist.zip
+      artifact: backend_node_2/packages/foodtraucker-checkin-stream/dist.zip
     environment:
       NODE_ENV: ${opt:stage, self:provider.stage}
     handler: index.handler
