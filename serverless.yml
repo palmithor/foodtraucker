@@ -117,13 +117,13 @@ functions:
             parameters:
               paths:
                 id: true
-  checkinStream:
+  checkin-stream:
     runtime: nodejs6.10
     package:
-      artifact: backend_node.zip
+      artifact: backend_node_2/packages/foodtraucker-checkin/dist.zip
     environment:
       NODE_ENV: ${opt:stage, self:provider.stage}
-    handler: checkin.checkinStream
+    handler: index.handler
     events:
       - stream:
           type: dynamodb
