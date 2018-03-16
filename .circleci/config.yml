@@ -91,7 +91,7 @@ jobs:
       - checkout
       
       - restore_cache:
-          key: dependency-cache-{{ checksum "backend_node_2/package.json" }}
+          key: dependency-cache-{{ checksum "backend_node/package.json" }}
 
       - run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
       - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -101,22 +101,22 @@ jobs:
           
       - run: 
           name: Install dependencies
-          working_directory: ~/repo/backend_node_2
+          working_directory: ~/repo/backend_node
           command: yarn install
 
       - save_cache:
-          key: dependency-cache-{{ checksum "webapp/package.json" }}
+          key: dependency-cache-{{ checksum "backend_node/package.json" }}
           paths:
-            - backend_node_2/node_modules
+            - backend_node/node_modules
       
       - run: 
           name: build app
-          working_directory: ~/repo/backend_node_2
+          working_directory: ~/repo/backend_node
           command: yarn build
 
       - run: 
           name: run tests
-          working_directory: ~/repo/backend_node_2
+          working_directory: ~/repo/backend_node
           command: yarn test
 
   deploy_backend:
