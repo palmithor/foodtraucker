@@ -1,5 +1,5 @@
 {
-  "name": "foodtraucker-checkin-stream",
+  "name": "foodtraucker-checkin",
   "version": "1.0.0",
   "scripts": {
     "build": "rimraf dist && cross-env NODE_ENV=production webpack",
@@ -10,9 +10,11 @@
     "@foodtraucker/utils": "^1.0.0",
     "@types/aws-lambda": "^0.0.31",
     "@types/elasticsearch": "^5.0.22",
+    "@types/uuid": "^3.4.3",
     "aws-sdk": "^2.209.0",
     "elasticsearch": "^14.2.0",
-    "http-aws-es": "^4.0.0"
+    "http-aws-es": "^4.0.0",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "cross-env": "^5.1.3",

@@ -102,10 +102,10 @@ functions:
               paths:
                 id: true
   checkin:
-    runtime: java8
+    runtime: nodejs6.10
     package:
-      artifact: backend_java/target/foodtraucker.jar
-    handler: com.foodtraucker.serverless.trucks.CheckinHandler
+      artifact: backend_node_2/packages/foodtraucker-checkin/dist.zip
+    handler: index.handler
     events:
       - http:
           path: foodtrucks/{id}/checkins
