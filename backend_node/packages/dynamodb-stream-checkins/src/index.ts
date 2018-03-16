@@ -16,6 +16,8 @@ export const promiseHandler = async (event: DynamoDBStreamEvent) => {
   } catch (e) {
     await createIndex();
   }
+
+  console.log(event);
   await Promise.all(
     event.Records.map(async record => {
       if (record) {

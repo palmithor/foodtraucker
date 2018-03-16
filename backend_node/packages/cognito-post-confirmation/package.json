@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rimraf dist && cross-env NODE_ENV=production webpack",
-    "package": "zip -j dist.zip dist/*"
+    "package": "zip -j cognito-post-confirmation.zip dist/*",
+    "clean": "rm -rf cognito-post-confirmation.zip"
   },
   "main": "./dist/index.js",
   "dependencies": {

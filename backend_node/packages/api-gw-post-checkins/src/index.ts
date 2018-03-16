@@ -10,6 +10,8 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
   const datetime = new Date().getTime().toString();
 
   const body = JSON.parse(event.body as string);
+
+
   const item = {
     foodtruck_id: {
       S: event.pathParameters!.id,
@@ -18,19 +20,19 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
       S: uuid(),
     },
     checkin: {
-      N: body.checkin,
+      N: body.checkin.toString()
     },
     checkout: {
-      N: body.checkin,
+      N: body.checkin.toString()
     },
     lat: {
-      N: body.lat,
+      N: body.lat.toString()
     },
     lon: {
-      N: body.lon,
+      N: body.lon.toString()
     },
     updated: {
-      N: datetime,
+      N: datetime
     },
     created: {
       N: datetime,

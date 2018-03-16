@@ -1,7 +1,6 @@
-backend_node.zip
 .serverless
 node_modules
 dist
-dist.zip
+*.zip
 .idea
 *.log

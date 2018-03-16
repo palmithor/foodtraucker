@@ -83,7 +83,7 @@ functions:
       NODE_ENV: ${opt:stage, self:provider.stage}
     runtime: nodejs6.10
     package:
-      artifact: backend_node_2/packages/cognito-post-confirmation/dist.zip
+      artifact: backend_node/packages/cognito-post-confirmation/cognito-post-confirmation.zip
     handler: index.handler
   updateUser:
     runtime: java8
@@ -101,11 +101,13 @@ functions:
             parameters:
               paths:
                 id: true
-  checkin:
+  api-gw-post-checkins:
     runtime: nodejs6.10
     package:
-      artifact: backend_node_2/packages/foodtraucker-checkin/dist.zip
+      artifact: backend_node/packages/api-gw-post-checkins/api-gw-post-checkins.zip
     handler: index.handler
+    environment:
+      NODE_ENV: ${opt:stage, self:provider.stage}
     events:
       - http:
           path: foodtrucks/{id}/checkins
@@ -117,10 +119,10 @@ functions:
             parameters:
               paths:
                 id: true
-  checkin-stream:
+  dynamodb-stream-checkins:
     runtime: nodejs6.10
     package:
-      artifact: backend_node_2/packages/foodtraucker-checkin-stream/dist.zip
+      artifact: backend_node/packages/dynamodb-stream-checkins/dynamodb-stream-checkins.zip
     environment:
       NODE_ENV: ${opt:stage, self:provider.stage}
     handler: index.handler
