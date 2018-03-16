@@ -79,7 +79,46 @@ jobs:
           name: build app
           working_directory: ~/repo/webapp
           command: npm run build
-  
+
+  backend_node:
+    docker:
+      - image: webpackcontrib/circleci-node8
+      
+    
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      
+      - restore_cache:
+          key: dependency-cache-{{ checksum "backend_node/package.json" }}
+
+      - run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      - run:
+          name: Install yarn
+          command: sudo apt-get update && sudo apt-get install yarn
+          
+      - run: 
+          name: Install dependencies
+          working_directory: ~/repo/backend_node
+          command: yarn install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "backend_node/package.json" }}
+          paths:
+            - backend_node/node_modules
+      
+      - run: 
+          name: build app
+          working_directory: ~/repo/backend_node
+          command: yarn build
+
+      - run: 
+          name: run tests
+          working_directory: ~/repo/backend_node
+          command: yarn test
+
   deploy_backend:
     docker:
       - image: webpackcontrib/circleci-jdk9-node6
@@ -88,6 +127,12 @@ jobs:
 
     steps:
       - checkout
+
+      - run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      - run:
+          name: Install yarn
+          command: sudo apt-get update && sudo apt-get install yarn
 
       - run:
           name: install serverless
@@ -162,6 +207,7 @@ workflows:
   version: 2
   backend_and_frontend:
     jobs:
+      - backend_node
       - backend_java
       - webapp
       - deploy_webapp:
@@ -170,3 +216,4 @@ workflows:
       - deploy_backend:
           requires: 
             - backend_java
+            - backend_node

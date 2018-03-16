@@ -1,0 +1,15 @@
+{
+  "name": "@foodtraucker/utils",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "dependencies": {
+    "@types/aws-lambda": "^0.0.31"
+  },
+  "devDependencies": {
+    "typings": "^2.1.1"
+  }
+}
