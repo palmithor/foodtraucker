@@ -1,17 +1,18 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './App'
-import router from './router'
-import store from './store'
-import VueResource from 'vue-resource'
-import VueCookie from 'vue-cookie'
-import VeeValidate from 'vee-validate'
+import VeeValidate from 'vee-validate';
+import VueAxios from 'vue-axios';
+import Vue from 'vue';
 
-Vue.use(VeeValidate)
-Vue.use(VueResource)
-Vue.use(VueCookie)
-Vue.config.productionTip = false
+import App from './App';
+import router from './router';
+import store from './store';
+import axios from './api/axios';
+
+Vue.use(VueAxios, axios);
+
+Vue.use(VeeValidate);
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
@@ -20,8 +21,11 @@ new Vue({
   store,
   template: '<App/>',
   components: { App },
-  created: function () {
-    this.$store.dispatch('initSession')
-  }
-})
+  created() {
+    store.dispatch('getCurrentUser');
+    this.axios.get('/users/abc')
+      .then(response => console.log(response))
+      .catch(err => console.log(`in error: ${err}`));
+  },
+});
 
