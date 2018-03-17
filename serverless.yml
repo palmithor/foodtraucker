@@ -26,7 +26,7 @@ provider:
   versionFunctions: false # for now when we are experimenting
   environment:
     USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-users
-    TRUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-trucks
+    TRUCKS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtrucks
     FOODTRUCK_CHECKINS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-checkins
     FOODTRUCK_USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-users
     FOODTRUCK_MENUS_TABLE: ${self:service}-${opt:stage, self:provider.stage}-foodtruck-menus
@@ -119,6 +119,20 @@ functions:
             parameters:
               paths:
                 id: true
+  api-gw-post-foodtrucks:
+    runtime: nodejs6.10
+    package:
+      artifact: backend_node/packages/api-gw-post-foodtrucks/api-gw-post-foodtrucks.zip
+    handler: index.handler
+    environment:
+      NODE_ENV: ${opt:stage, self:provider.stage}
+    events:
+      - http:
+          path: foodtrucks
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
   dynamodb-stream-checkins:
     runtime: nodejs6.10
     package:
@@ -173,11 +187,15 @@ resources:
       Properties:
         TableName: ${self:provider.environment.TRUCKS_TABLE}
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: foodtruck_id
+            AttributeType: S
+          - AttributeName: name
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: foodtruck_id
             KeyType: HASH
+          - AttributeName: name
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits:  1
           WriteCapacityUnits: 1

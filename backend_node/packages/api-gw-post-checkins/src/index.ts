@@ -11,13 +11,14 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 
   const body = JSON.parse(event.body as string);
 
-
-  const item = {
+  const id = uuid();
+  const foodTruckId = event.pathParameters!.id;
+    const item = {
     foodtruck_id: {
-      S: event.pathParameters!.id,
+      S: foodTruckId,
     },
     id: {
-      S: uuid(),
+      S: id,
     },
     checkin: {
       N: body.checkin.toString()
@@ -47,7 +48,16 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(item),
+    body: JSON.stringify({
+        id,
+        foodtruck_id: foodTruckId,
+        checkin: body.checkin,
+        checkout: body.checkout,
+        lat: body.lat,
+        lon: body.lon,
+        updated: datetime,
+        created: datetime
+    }),
   };
 };
 
