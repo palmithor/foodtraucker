@@ -1,10 +1,10 @@
 {
-  "name": "api-gw-post-checkins",
+  "name": "api-gw-post-foodtrucks",
   "version": "1.0.0",
   "scripts": {
     "build": "rimraf dist && cross-env NODE_ENV=production webpack",
-    "package": "zip -j api-gw-post-checkins.zip dist/*",
-    "clean": "rm -rf api-gw-post-checkins.zip"
+    "package": "zip -j api-gw-post-foodtrucks.zip dist/*",
+    "clean": "rm -rf api-gw-post-foodtrucks.zip"
   },
   "main": "./dist/index.js",
   "dependencies": {
