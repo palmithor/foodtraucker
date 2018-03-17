@@ -63,7 +63,7 @@ jobs:
       - run: 
           name: Install dependencies
           working_directory: ~/repo/webapp
-          command: npm install
+          command: yarn install
 
       - save_cache:
           key: dependency-cache-{{ checksum "webapp/package.json" }}
@@ -73,12 +73,12 @@ jobs:
       - run: 
           name: run tests
           working_directory: ~/repo/webapp
-          command: npm test
+          command: yarn test
 
       - run: 
           name: build app
           working_directory: ~/repo/webapp
-          command: npm run build
+          command: yarn run build
 
   backend_node:
     docker:
@@ -176,7 +176,7 @@ jobs:
       - run: 
           name: Install dependencies
           working_directory: ~/repo/webapp
-          command: npm install
+          command: yarn install
 
       - save_cache:
           key: dependency-cache-{{ checksum "webapp/package.json" }}
@@ -188,9 +188,9 @@ jobs:
           working_directory: ~/repo/webapp
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              npm run build              
+              yarn run build              
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              npm run build-aws_test
+              yarn run build-test
             fi
 
       - deploy:
