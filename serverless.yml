@@ -133,6 +133,20 @@ functions:
           cors: true
           authorizer:
             arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
+  api-gw-get-self-foodtrucks:
+    runtime: nodejs6.10
+    package:
+      artifact: backend_node/packages/api-gw-get-self-foodtrucks/api-gw-get-self-foodtrucks.zip
+    handler: index.handler
+    environment:
+      NODE_ENV: ${opt:stage, self:provider.stage}
+    events:
+      - http:
+          path: self/foodtrucks
+          method: get
+          cors: true
+          authorizer:
+            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
   dynamodb-stream-checkins:
     runtime: nodejs6.10
     package:
