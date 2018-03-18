@@ -96,9 +96,6 @@ export default {
 </script>
 
 <style scoped>
-  .box {
-    margin-top: 5rem;
-  }
   .avatar {
     margin-top: -96px;
     padding-bottom: 12px;
