@@ -48,7 +48,7 @@ jobs:
       - checkout
       
       - restore_cache:
-          key: dependency-cache-{{ checksum "backend_node/package.json" }}
+          key: dependency-cache-{{ checksum "backend_node/yarn.lock" }}
 
       - run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
       - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
