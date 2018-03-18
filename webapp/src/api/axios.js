@@ -1,5 +1,5 @@
 import axios from 'axios';
-import AuthService from '../service/AuthService';
+import store from '../store';
 
 
 const instance = axios.create({
@@ -9,10 +9,16 @@ const instance = axios.create({
   },
 });
 
-instance.interceptors.request.use(config => AuthService.getCurrentUser()
-  .then((currentUser) => {
-    config.headers.Authorization = currentUser.tokens.IdToken;
-    return config;
-  }), err => Promise.reject(err));
+instance.interceptors.request.use((config) => {
+  if (store.getters.isAuthenticated) {
+    config.headers.Authorization = `${store.state.auth.user.tokens.IdToken}`;
+  }
+  return config;
+}, err => Promise.reject(err));
+
+
+/*
+
+ */
 
 export default instance;

@@ -22,7 +22,7 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
     .promise();
 
   if (userFoodtrucksResult.Count && userFoodtrucksResult.Count > 0) {
-    const foodtruckListResult = await Promise.all(
+    const foodtruckListResult: any[] = await Promise.all(
       userFoodtrucksResult!.Items!.map(async foodtruckUser => {
         return dbClient
           .query({
@@ -38,34 +38,25 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
           .promise();
       }),
     );
-    /*
-    [
-{
-    "Items": [
-        {
-            "foodtruck_id": "51da67b0-293a-11e8-9957-539ba287ff1f",
-            "created": 1521219109291,
-            "updated": 1521219109291,
-            "name": "Foodtraucker"
-        }
-    ],
-    "Count": 1,
-    "ScannedCount": 1
-}
-]*/
-    let result: any[] = [];
-    if(foodtruckListResult.length > 0) {
-      result = foodtruckListResult[0].Items!.concat(
-        foodtruckListResult.splice(1).map(i => i.Items))
-    }
+
     return {
       statusCode: 200,
-      body: JSON.stringify(result),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+      },
+      body: JSON.stringify([].concat(...foodtruckListResult.map(arr => arr.Items))),
     };
   }
 
   return {
     statusCode: 200,
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    },
     body: JSON.stringify([]),
   };
 };

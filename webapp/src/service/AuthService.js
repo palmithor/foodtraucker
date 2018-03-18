@@ -27,7 +27,9 @@ export default {
       } else {
         cognitoUser.getSession((err, session) => {
           if (err) reject(err);
-          if (session) resolve(constructUser(cognitoUser, session));
+          if (session) {
+            resolve(constructUser(cognitoUser, session));
+          }
         });
       }
     });

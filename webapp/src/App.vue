@@ -1,9 +1,13 @@
 <template>
   <div id="app">
-    <app-nav-bar/>
-    <div>
-      <router-view/>
-    </div>
+    <section>
+      <app-nav-bar/>
+    </section>
+    <section class="section">
+      <div class="container">
+        <router-view/>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -17,5 +21,6 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+  @import "assets/sass/main";
 </style>
