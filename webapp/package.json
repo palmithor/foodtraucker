@@ -11,7 +11,7 @@
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
-    "build-test": "NODE_ENV=testing node build/build.js"
+    "build-test": "node build/build-test.js"
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^1.21.0",
