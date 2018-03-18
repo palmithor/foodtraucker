@@ -25,7 +25,7 @@ new Vue({
     store.dispatch('getCurrentUser');
     this.axios.get('/users/abc')
       .then(response => console.log(response))
-      .catch(err => console.log(`in error: ${err}`));
+      .catch(err => console.log(`in error: ${JSON.stringify(err)}`));
   },
 });
 
