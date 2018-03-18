@@ -6,7 +6,21 @@ import Login from '@/components/auth/Login';
 import SignUp from '@/components/auth/SignUp';
 import Dashboard from '@/components/dashboard/Dashboard';
 
+import store from '../store';
+
 Vue.use(Router);
+
+
+const requireAuth = function (to, from, next) {
+  if (!store.getters.isAuthenticated) {
+    next({
+      path: '/'
+    });
+  } else {
+    next();
+  }
+};
+
 
 export default new Router({
   routes: [
@@ -29,16 +43,19 @@ export default new Router({
       path: '/dashboard',
       name: 'dashboard',
       component: Dashboard,
+      beforeEnter: requireAuth,
     },
     {
       path: '/foodtrucks/:id',
       name: 'foodtruck',
       component: Home,
+      beforeEnter: requireAuth,
     },
     {
       path: '/foodtrucks/:id/checkins',
       name: 'foodtruck-checkin',
       component: Home,
+      beforeEnter: requireAuth,
     },
   ],
 });

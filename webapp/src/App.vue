@@ -3,10 +3,8 @@
     <section>
       <app-nav-bar/>
     </section>
-    <section class="section">
-      <div class="container">
-        <router-view/>
-      </div>
+    <section class="hero foodtraucker is-fullheight">
+      <router-view/>
     </section>
   </div>
 </template>
@@ -23,4 +21,12 @@ export default {
 
 <style lang="scss">
   @import "assets/sass/main";
+
+  .hero.foodtraucker {
+    background: #F2F6FA;
+  }
+  .hero .nav, .hero.is-success .nav {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
 </style>

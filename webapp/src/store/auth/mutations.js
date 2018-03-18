@@ -15,6 +15,7 @@ export default {
     state.loading = true;
   },
   [types.ERROR](state, payload) {
+    state.loading = false;
     state.error = payload;
   },
 };
