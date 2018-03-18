@@ -93,7 +93,7 @@ functions:
     events:
       - http:
           path: users/{id}
-          method: get
+          method: put
           cors: true
           authorizer:
             arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}

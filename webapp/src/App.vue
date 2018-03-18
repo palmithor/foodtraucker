@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <app-nav-bar/>
     <div>
       <router-view/>
@@ -8,13 +8,13 @@
 </template>
 
 <script>
-  import NavBar from '@/components/shared/NavBar'
+import NavBar from '@/components/shared/NavBar';
 
-  export default {
-    components: {
-      appNavBar: NavBar
-    }
-  }
+export default {
+  components: {
+    appNavBar: NavBar,
+  },
+};
 </script>
 
 <style>
