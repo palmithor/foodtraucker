@@ -5,17 +5,20 @@ import AuthService from '../../service/AuthService';
 
 export default {
   getCurrentUser({ commit }) {
-    AuthService.getCurrentUser()
+    return AuthService.getCurrentUser()
       .then((user) => {
         commit(types.AUTHENTICATE, user);
+        return user;
       })
       .catch((err) => { });
   },
 
   login({ commit }, credentials) {
-    AuthService.authenticateUser(credentials)
+    commit(types.LOADING, true);
+    return AuthService.authenticateUser(credentials)
       .then((user) => {
         commit(types.AUTHENTICATE, user);
+        return user;
       }).catch((error) => {
         if (error.code === 'UserNotConfirmedException') {
           console.error('TODO: User must be confirmed');
@@ -38,8 +41,10 @@ export default {
     return AuthService.signOut()
       .then(() => {
         commit(types.SIGN_OUT);
+        return {};
       }).catch(() => {
         commit(types.SIGN_OUT);
+        return {};
       });
   },
 /*

@@ -42,7 +42,7 @@
             <p class="control">
               <router-link
                 to="signup"
-                class="button is-primary"
+                class="button is-info"
               >
                 Sign Up
               </router-link>
@@ -51,7 +51,7 @@
           <div v-else class="field is-grouped">
             <p class="control">
               <button
-                class="button is-primary"
+                class="button is-info"
                 @click="signOut()"
               >
                 Sign Out
@@ -71,12 +71,12 @@ export default {
   }),
   methods: {
     signOut() {
-      this.$store.dispatch('signOut');
+      this.$store.dispatch('signOut')
+        .then(() => this.$router.replace(this.$route.query.redirect || '/'));
     },
   },
   computed: {
     isAuthenticated() {
-      console.log('Callback');
       return this.$store.getters.isAuthenticated;
     },
   },
