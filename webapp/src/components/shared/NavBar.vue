@@ -16,13 +16,13 @@
     <div id="navbarExampleTransparentExample" class="navbar-menu" :class="{'is-active' : isMenuShowing}">
       <div class="navbar-start">
         <router-link
-          to="home"
+          to="/"
           class="navbar-item">
             Home
         </router-link>
         <router-link
           v-if="isAuthenticated"
-          to="dashboard"
+          to="/dashboard"
           class="navbar-item">
             Dashboard
         </router-link>
