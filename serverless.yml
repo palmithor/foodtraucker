@@ -85,22 +85,6 @@ functions:
     package:
       artifact: backend_node/packages/cognito-post-confirmation/cognito-post-confirmation.zip
     handler: index.handler
-  updateUser:
-    runtime: java8
-    package:
-      artifact: backend_java/target/foodtraucker.jar
-    handler: com.foodtraucker.serverless.users.UpdateUserHandler
-    events:
-      - http:
-          path: users/{id}
-          method: put
-          cors: true
-          authorizer:
-            arn: ${self:custom.stages.${opt:stage, self:provider.stage}.user-pool-arn}
-          request:
-            parameters:
-              paths:
-                id: true
   api-gw-post-checkins:
     runtime: nodejs6.10
     package:
@@ -149,20 +133,6 @@ functions:
             Fn::GetAtt:
               - FoodtruckCheckinsTableDynamoDB
               - StreamArn
-  addMenu:
-    runtime: java8
-    package:
-      artifact: backend_java/target/foodtraucker.jar
-    handler: com.foodtraucker.serverless.menus.AddFoodtruckMenuHandler
-    events:
-      - http:
-          path: foodtrucks/{id}/menus
-          method: post
-          cors: true
-          request:
-            parameters:
-              paths:
-                id: true
 resources:
   Resources:
     UserTableDynamoDB:
