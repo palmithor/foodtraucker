@@ -62,36 +62,3 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 };
 
 export const handler = createAPIGatewayEventCallbackHandler(promiseHandler);
-
-/*
-  @NotNull
-    private Float lat; // TODO set max min
-    @NotNull
-    private Float lon; // TODO set max min
-    @NotNull
-    private Long checkin; // TODO create validator which validates that checkin is before checkout
-    @NotNull
-    private Long checkout;
-
-
-
-    FoodtruckCheckinsTableDynamoDB:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:provider.environment.FOODTRUCK_CHECKINS_TABLE}
-        AttributeDefinitions:
-          - AttributeName: foodtruck_id
-            AttributeType: S
-          - AttributeName: id # GUID
-            AttributeType: S
-        KeySchema:
-          - AttributeName: foodtruck_id
-            KeyType: HASH
-          - AttributeName: id
-            KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits:  1
-          WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: NEW_IMAGE
-    */
