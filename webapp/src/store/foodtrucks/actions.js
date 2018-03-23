@@ -4,7 +4,7 @@ import FoodtruckService from '../../service/FoodtruckService';
 
 
 export default {
-  getSelfFoodtrucks({ commit }) {
+  loadSelfFoodtrucks({ commit }) {
     return FoodtruckService.getSelfFoodtrucks()
       .then((response) => {
         const list = response.data.map(foodtruck => ({
@@ -18,5 +18,8 @@ export default {
       .catch((err) => {
 
       });
+  },
+  clearFoodtrucks({ commit }) {
+    commit(types.FOODTRUCK_LIST, []);
   },
 };
