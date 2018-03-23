@@ -11,7 +11,7 @@ module.exports = {
     browser
       .url(devServer)
       .waitForElementVisible('#app', 5000)
-      .assert.containsText('p', 'This is home landing page')
+      .assert.containsText('p', 'Login')
       .end();
   },
 };

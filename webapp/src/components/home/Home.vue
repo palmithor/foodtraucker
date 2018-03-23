@@ -1,13 +1,19 @@
 <template>
-  <div id="derp">
-    <v-map ref="map" @l-moveend="onMoveEnd" :zoom="zoom" :center="center" id="mapView">
-      <v-tile-layer :url="url" :attribution="attribution"></v-tile-layer>
-      <div v-for="marker in markers">
-        <v-marker :lat-lng="marker.latLng"></v-marker>
-        <v-marker-popup :position="marker.latLng" :text="marker.text" :title="marker.title"></v-marker-popup>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-fluid">
+        <div class="columns">
+          <v-map class="column mobileMap" ref="map" @l-moveend="onMoveEnd" :zoom="zoom" :center="center">
+            <v-tile-layer :url="url" :attribution="attribution"></v-tile-layer>
+            <div v-for="marker in markers">
+              <v-marker :lat-lng="marker.latLng"></v-marker>
+              <v-marker-popup :position="marker.latLng" :text="marker.text" :title="marker.title"></v-marker-popup>
+            </div>
+          </v-map>
+        </div>
       </div>
-    </v-map>
-  </div>
+    </div>
+  </section>
 </template>
 
 // this.$refs.map.mapObject
@@ -48,12 +54,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#derp  {
-  height: 100%;
-  margin: 0;
-}
-#mapView {
-  height: 600px;
-  width: 600px;
+
+.mobileMap {
+  height: 80vh;
 }
 </style>
