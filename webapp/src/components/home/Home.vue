@@ -5,9 +5,9 @@
         <div class="columns">
           <v-map class="column mobileMap" ref="map" @l-moveend="onMoveEnd" :zoom="zoom" :center="center">
             <v-tile-layer :url="url" :attribution="attribution"></v-tile-layer>
-            <div v-for="marker in markers">
-              <v-marker :lat-lng="marker.latLng"></v-marker>
-              <v-marker-popup :position="marker.latLng" :text="marker.text" :title="marker.title"></v-marker-popup>
+            <div v-for="checkin in checkins">
+              <v-marker :lat-lng="checkin.latLng"></v-marker>
+              <v-marker-popup :position="checkin.latLng" :text="checkin.foodtruckId" :title="checkin.foodtruckId"></v-marker-popup>
             </div>
           </v-map>
         </div>
@@ -41,12 +41,9 @@ export default {
     },
   },
   computed: {
-    markers() {
-      return [{
-        latLng: L.latLng(57.7089, 11.9746),
-        text: 'hej',
-        title: 'Hej yo',
-      }];
+    checkins() {
+      console.log(this.$store.state.checkins.list);
+      return this.$store.state.checkins.list;
     },
   },
 };

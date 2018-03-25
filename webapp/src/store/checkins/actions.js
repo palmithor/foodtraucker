@@ -41,7 +41,13 @@ export default {
       },
     }).then((resp) => {
       const hits = resp.hits.hits;
-      console.log(hits);
+      commit(types.CHECKINS_LIST, hits.filter(checkin => checkin._source.foodtruck_id != undefined).map(checkin => ({
+        foodtruckName: checkin._source.foodtruck_name,
+        foodtruckId: checkin._source.foodtruck_id,
+        checkin: new Date(Number(checkin._source.checkin)),
+        checkout: new Date(Number(checkin._source.checkout)),
+        latLng: L.latLng(checkin._source.coordinate.lat, checkin._source.coordinate.lon),
+      })));
     }).catch((err) => {
       console.log(err);
     });
