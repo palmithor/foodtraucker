@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { Marker, Popup } from 'vue2-leaflet';
+import { Marker, Popup } from 'mapa/src/mapa';
 
 export default {
   name: 'MarkerPopup',
