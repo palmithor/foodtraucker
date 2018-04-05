@@ -4,11 +4,9 @@
       <div class="container is-fluid">
         <div class="columns">
           <v-map class="column mobileMap" ref="map" @l-moveend="onMoveEnd" :zoom="zoom" :center="center">
-            <v-tile-layer :url="url" :attribution="attribution"></v-tile-layer>
-            <div v-for="checkin in checkins">
-              <v-marker :lat-lng="checkin.latLng"></v-marker>
-              <v-marker-popup :position="checkin.latLng" :text="checkin.foodtruckId" :title="checkin.foodtruckId"></v-marker-popup>
-            </div>
+            <v-tile-layer :url="url" :attribution="attribution"/>
+            <v-marker-cluster ref="cluster" :bare="true"
+                              :options="{chunkedLoading: true, maxClusterRadius: 200}"/>
           </v-map>
         </div>
       </div>
@@ -19,14 +17,14 @@
 // this.$refs.map.mapObject
 
 <script>
-import { Map, TileLayer, Marker } from 'vue2-leaflet';
+import { Map, Tile, MarkerCluster } from 'mapa/src/mapa';
 import MarkerPopup from './MarkerPopup';
 
 export default {
   components: {
     'v-map': Map,
-    'v-tile-layer': TileLayer,
-    'v-marker': Marker,
+    'v-tile-layer': Tile,
+    'v-marker-cluster': MarkerCluster,
     'v-marker-popup': MarkerPopup,
   },
   data: () => ({
@@ -37,14 +35,25 @@ export default {
   }),
   methods: {
     onMoveEnd() {
-      this.$store.dispatch('loadCheckins', this.$refs.map.mapObject.getBounds());
+      this.$store.dispatch('loadCheckins', this.$refs.map.mapa.getBounds());
     },
   },
   computed: {
-    checkins() {
-      console.log(this.$store.state.checkins.list);
-      return this.$store.state.checkins.list;
+    locations() {
+      const l = this.$store.state.checkins.list.map((checkin) => {
+        console.log(checkin)
+        const marker = window.L.marker(checkin.latLng);
+        marker.bindTooltip(`Hello ${checkin.foodtruck_id}`);
+        return marker;
+      });
+      this.$refs.cluster.update(l);
+      console.log('updated');
+      return l;
     },
+  },
+  mounted() {
+    this.$refs.cluster.add(this.$refs.map.mapa);
+    this.$refs.cluster.update(this.locations);
   },
 };
 </script>

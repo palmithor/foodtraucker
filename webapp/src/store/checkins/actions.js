@@ -5,7 +5,7 @@ import * as types from './mutation-types';
 
 const esClient = new Client({
   host: 'https://search-foodtraucker-nscubf57faz4unxvtmsuthfphy.eu-central-1.es.amazonaws.com',
-  log: 'trace',
+  log: 'warning',
 });
 
 const checkinIndex = process.env.ES_CHECKIN_INDEX;
@@ -40,14 +40,15 @@ export default {
         },
       },
     }).then((resp) => {
-      const hits = resp.hits.hits;
-      commit(types.CHECKINS_LIST, hits.filter(checkin => checkin._source.foodtruck_id != undefined).map(checkin => ({
-        foodtruckName: checkin._source.foodtruck_name,
-        foodtruckId: checkin._source.foodtruck_id,
-        checkin: new Date(Number(checkin._source.checkin)),
-        checkout: new Date(Number(checkin._source.checkout)),
-        latLng: L.latLng(checkin._source.coordinate.lat, checkin._source.coordinate.lon),
-      })));
+      const checkins = resp.hits.hits.filter(hit => hit._source.foodtruck_id)
+        .map(hit => ({
+          foodtruck_id: hit._source.foodtruck_id,
+          checkin: new Date(Number(hit._source.checkin)),
+          checkout: new Date(Number(hit._source.checkout)),
+          latLng: [hit._source.coordinate.lat, hit._source.coordinate.lon],
+        }));
+      commit(types.CHECKINS_LIST, checkins);
+      return checkins;
     }).catch((err) => {
       console.log(err);
     });
