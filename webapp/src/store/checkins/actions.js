@@ -13,6 +13,7 @@ const checkinIndex = process.env.ES_CHECKIN_INDEX;
 
 export default {
   loadCheckins({ commit }, boundingBox) {
+    commit(types.LOADING);
     return esClient.search({
       index: `${checkinIndex}`,
       type: ['checkins'],
@@ -26,12 +27,12 @@ export default {
               geo_bounding_box: {
                 coordinate: {
                   top_left: {
-                    lat: boundingBox._northEast.lat,
-                    lon: boundingBox._northEast.lng,
+                    lat: Math.max(boundingBox._northEast.lat, boundingBox._southWest.lat),
+                    lon: Math.min(boundingBox._northEast.lng, boundingBox._southWest.lng),
                   },
                   bottom_right: {
-                    lat: boundingBox._southWest.lat,
-                    lon: boundingBox._southWest.lng,
+                    lat: Math.min(boundingBox._northEast.lat, boundingBox._southWest.lat),
+                    lon: Math.max(boundingBox._northEast.lng, boundingBox._southWest.lng),
                   },
                 },
               },
@@ -50,7 +51,6 @@ export default {
       commit(types.CHECKINS_LIST, checkins);
       return checkins;
     }).catch((err) => {
-      console.log(err);
     });
   },
 };

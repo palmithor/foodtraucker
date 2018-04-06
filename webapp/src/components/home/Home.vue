@@ -3,10 +3,10 @@
     <div class="hero-body">
       <div class="container is-fluid">
         <div class="columns">
-          <v-map class="column mobileMap" ref="map" @l-moveend="onMoveEnd" :zoom="zoom" :center="center">
+          <v-map class="column mobileMap" ref="map" @l-moveend="onMoveEnd" :zoom="zoom" :center="initialLocation">
             <v-tile-layer :url="url" :attribution="attribution"/>
-            <v-marker-cluster ref="cluster" :bare="true"
-                              :options="{chunkedLoading: true, maxClusterRadius: 200}"/>
+            <v-marker-cluster ref="cluster" :bare="true" @updated="isFetching"
+                              :options="{chunkedLoading: false, maxClusterRadius: 200}"/>
           </v-map>
         </div>
       </div>
@@ -18,42 +18,50 @@
 
 <script>
 import { Map, Tile, MarkerCluster } from 'mapa/src/mapa';
-import MarkerPopup from './MarkerPopup';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
 export default {
+
+
   components: {
     'v-map': Map,
     'v-tile-layer': Tile,
     'v-marker-cluster': MarkerCluster,
-    'v-marker-popup': MarkerPopup,
   },
   data: () => ({
     zoom: 12,
-    center: [57.7089, 11.9746],
+    initialLocation: [57.7089, 11.9746],
     url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    icon: window.L.icon({ iconUrl, shadowUrl }),
+    locations: [],
+    isFetching: false,
   }),
   methods: {
     onMoveEnd() {
-      this.$store.dispatch('loadCheckins', this.$refs.map.mapa.getBounds());
+      if (this.isFetching) {
+        return;
+      }
+      this.isFetching = true;
+      this.$store.dispatch('loadCheckins', this.$refs.map.mapa.getBounds())
+        .then((checkins) => {
+          this.locations = [];
+          this.isFetching = false;
+          checkins.forEach((checkin) => {
+            const marker = window.L.marker(checkin.latLng, { icon: this.icon });
+            this.locations.push(marker);
+          });
+          this.$refs.cluster.update(this.locations);
+        }).catch(() => { this.isFetching = false; });
     },
   },
   computed: {
-    locations() {
-      const l = this.$store.state.checkins.list.map((checkin) => {
-        console.log(checkin)
-        const marker = window.L.marker(checkin.latLng);
-        marker.bindTooltip(`Hello ${checkin.foodtruck_id}`);
-        return marker;
-      });
-      this.$refs.cluster.update(l);
-      console.log('updated');
-      return l;
-    },
   },
   mounted() {
     this.$refs.cluster.add(this.$refs.map.mapa);
     this.$refs.cluster.update(this.locations);
+    this.onMoveEnd();
   },
 };
 </script>
@@ -61,7 +69,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-.mobileMap {
-  height: 80vh;
-}
+  .mobileMap {
+    height: 80vh;
+  }
 </style>
