@@ -47,12 +47,12 @@ export default {
       this.$store.dispatch('loadCheckins', this.$refs.map.mapa.getBounds())
         .then((checkins) => {
           this.locations = [];
-          this.isFetching = false;
           checkins.forEach((checkin) => {
             const marker = window.L.marker(checkin.latLng, { icon: this.icon });
             this.locations.push(marker);
           });
           this.$refs.cluster.update(this.locations);
+          this.isFetching = false;
         }).catch(() => { this.isFetching = false; });
     },
   },
