@@ -11,6 +11,8 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 
   const body = JSON.parse(event.body as string);
 
+  // todo find food truck and include name in checkin data
+
   const id = uuid();
   const foodTruckId = event.pathParameters!.id;
     const item = {

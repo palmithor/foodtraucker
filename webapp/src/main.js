@@ -3,6 +3,10 @@
 import VeeValidate from 'vee-validate';
 import VueAxios from 'vue-axios';
 import Vue from 'vue';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+
 
 import App from './App';
 import router from './router';
@@ -13,6 +17,7 @@ Vue.use(VueAxios, axios);
 
 Vue.use(VeeValidate);
 Vue.config.productionTip = false;
+
 
 /* eslint-disable no-new */
 new Vue({
