@@ -72,7 +72,10 @@ export default {
   methods: {
     signOut() {
       this.$store.dispatch('signOut')
-        .then(() => this.$router.replace(this.$route.query.redirect || '/'));
+        .then(() => {
+          this.$router.replace(this.$route.query.redirect || '/');
+          this.$store.dispatch('clearFoodtrucks');
+        });
     },
   },
   computed: {

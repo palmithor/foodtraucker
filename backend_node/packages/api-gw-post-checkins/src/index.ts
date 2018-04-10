@@ -15,6 +15,11 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
     return {
       statusCode: 400,
       body: JSON.stringify({ errorMessage: 'Checkout must be later than checkin' }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+      },
     };
   }
 
@@ -42,6 +47,7 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
       body: JSON.stringify({ errorMessage: 'The given Foodtruck is already checked in at this time' }),
     };
   }
+  // todo find food truck and include name in checkin data
 
   const id = uuid();
   const foodTruckId = event.pathParameters!.id;
@@ -80,6 +86,11 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 
   return {
     statusCode: 200,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    },
     body: JSON.stringify({
       id,
       foodtruck_id: foodTruckId,

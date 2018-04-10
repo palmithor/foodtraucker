@@ -22,7 +22,7 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('getSelfFoodtrucks');
+    this.$store.dispatch('loadSelfFoodtrucks');
   },
 };
 </script>

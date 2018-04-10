@@ -1,14 +1,22 @@
 <template>
   <div>
-    <p>This is home landing page</p>
+    <h1 class="title">Checkins</h1>
   </div>
 </template>
 
 <script>
-export default {
-  data: () => ({
 
+
+export default {
+  components: {
+  },
+  data: () => ({
   }),
+  computed: {
+    variable() {
+      return '';
+    },
+  },
 };
 </script>
 
