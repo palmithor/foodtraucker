@@ -15,7 +15,7 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 
   const id = uuid();
   const foodTruckId = event.pathParameters!.id;
-    const item = {
+  const item = {
     foodtruck_id: {
       S: foodTruckId,
     },
@@ -23,19 +23,19 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
       S: id,
     },
     checkin: {
-      N: body.checkin.toString()
+      N: body.checkin.toString(),
     },
     checkout: {
-      N: body.checkin.toString()
+      N: body.checkin.toString(),
     },
     lat: {
-      N: body.lat.toString()
+      N: body.lat.toString(),
     },
     lon: {
-      N: body.lon.toString()
+      N: body.lon.toString(),
     },
     updated: {
-      N: datetime
+      N: datetime,
     },
     created: {
       N: datetime,
@@ -50,15 +50,20 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 
   return {
     statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    },
     body: JSON.stringify({
-        id,
-        foodtruck_id: foodTruckId,
-        checkin: body.checkin,
-        checkout: body.checkout,
-        lat: body.lat,
-        lon: body.lon,
-        updated: datetime,
-        created: datetime
+      id,
+      foodtruck_id: foodTruckId,
+      checkin: body.checkin,
+      checkout: body.checkout,
+      lat: body.lat,
+      lon: body.lon,
+      updated: datetime,
+      created: datetime,
     }),
   };
 };
