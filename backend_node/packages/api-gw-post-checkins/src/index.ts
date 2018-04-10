@@ -4,7 +4,6 @@ import { DynamoDB } from 'aws-sdk';
 import { v1 as uuid } from 'uuid';
 
 const dynamodb = new DynamoDB();
-const dbClient = new DynamoDB.DocumentClient();
 
 export const promiseHandler = async (event: APIGatewayEvent) => {
   const tableName = process.env.FOODTRUCK_CHECKINS_TABLE;
@@ -12,25 +11,37 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 
   const body = JSON.parse(event.body as string);
 
-  const overlappingCheckin = await dbClient
-    .query({
+  if (body.checkin > body.checkout) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ errorMessage: 'Checkout must be later than checkin' }),
+    };
+  }
+
+  const overlappingCheckinScanResult = await dynamodb
+    .scan({
       TableName: tableName,
-      KeyConditionExpression:
-        '#foodtruckId = :footruckId AND #checkin <= :incomingCheckout AND #checkuot <= :incomingCheckin',
+      FilterExpression:
+        '#foodtruckId = :foodtruckId AND #checkin <= :incomingCheckout AND #checkout >= :incomingCheckin',
       ExpressionAttributeNames: {
         '#foodtruckId': 'foodtruck_id',
         '#checkin': 'checkin',
         '#checkout': 'checkout',
       },
       ExpressionAttributeValues: {
-        ':foodtruckId': event.pathParameters!.id,
-        ':checkin': body.checkin.toString(),
-        ':checkout': body.checkout.toString(),
+        ':foodtruckId': { S: event.pathParameters!.id },
+        ':incomingCheckin': { N: body.checkin.toString() },
+        ':incomingCheckout': { N: body.checkout.toString() },
       },
     })
     .promise();
 
-  console.log(overlappingCheckin);
+  if (overlappingCheckinScanResult.Items && overlappingCheckinScanResult.Items.length > 0) {
+    return {
+      statusCode: 409,
+      body: JSON.stringify({ errorMessage: 'The given Foodtruck is already checked in at this time' }),
+    };
+  }
 
   const id = uuid();
   const foodTruckId = event.pathParameters!.id;
