@@ -16,7 +16,7 @@
     <footer class="card-footer">
       <router-link  :to="{ name: 'foodtruck', params: {id : foodtruck.id} }"
                     class="card-footer-item">View</router-link>
-      <router-link  :to="{ name: 'foodtruck-checkin', params: {id : foodtruck.id} }"
+      <router-link  :to="{ name: 'checkin-create', params: {id : foodtruck.id} }"
                     class="card-footer-item">Checkin</router-link>
     </footer>
   </div>

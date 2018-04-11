@@ -16,9 +16,6 @@
                         <i class="fas fa-truck"></i>
                     </span>
                 </p>
-                <p v-show="errors.has('Foodtruck name') && hasBeenSubmitted" class="help is-danger">
-                  {{ errors.first('Foodtruck name') }}
-                </p>
                 <p v-show="serviceError.errorMessage && hasBeenSubmitted" class="help is-danger">
                   {{ serviceError.errorMessage }}
                 </p>
@@ -32,6 +29,9 @@
                   </button>
                 </p>
               </div>
+              <p v-show="errors.has('Foodtruck name') && hasBeenSubmitted" class="help is-danger">
+                {{ errors.first('Foodtruck name') }}
+              </p>
             </form>
           </div>
         </div>
