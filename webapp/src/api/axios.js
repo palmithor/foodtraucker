@@ -12,9 +12,12 @@ const instance = axios.create({
 instance.interceptors.request.use((config) => {
   if (store.getters.isAuthenticated) {
     config.headers.Authorization = `${store.state.auth.user.tokens.IdToken}`;
+    store.dispatch('getCurrentUser');
   }
   return config;
-}, err => Promise.reject(err));
+}, (err) => {
+  Promise.reject(err);
+});
 
 
 /*

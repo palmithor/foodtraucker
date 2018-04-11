@@ -7,13 +7,14 @@ import SignUp from '@/components/auth/SignUp';
 import Dashboard from '@/components/dashboard/Dashboard';
 import Checkin from '@/components/foodtruck/Checkin';
 import Foodtruck from '@/components/foodtruck/Foodtruck';
+import CreateFoodtruck from '@/components/foodtruck/CreateFoodtruck';
 
 import store from '../store';
 
 Vue.use(Router);
 
 
-const requireAuth = function (to, from, next) {
+const requireAuth = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
     next({
       path: '/',
@@ -48,6 +49,12 @@ export default new Router({
       beforeEnter: requireAuth,
     },
     {
+      path: '/foodtrucks/create',
+      name: 'foodtruck-create',
+      component: CreateFoodtruck,
+      beforeEnter: requireAuth,
+    },
+    {
       path: '/foodtrucks/:id',
       name: 'foodtruck',
       component: Foodtruck,
@@ -58,6 +65,10 @@ export default new Router({
       name: 'foodtruck-checkin',
       component: Checkin,
       beforeEnter: requireAuth,
+    },
+    {
+      path: '*',
+      redirect: '/',
     },
   ],
 });
