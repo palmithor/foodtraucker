@@ -58,6 +58,9 @@
                       :disabled="isLoading" :class="{'is-loading' : isLoading}">Submit</button>
                   </p>
                 </div>
+                <p v-show="serviceError.errorMessage && hasBeenSubmitted" class="help is-danger">
+                  {{ serviceError.errorMessage }}
+                </p>
               </form>
               <p v-show="signUpSent">Registration email has been sent your inbox</p>
             </div>
@@ -89,10 +92,12 @@ export default {
   methods: {
     submit() {
       this.hasBeenSubmitted = true;
-      this.$validator.validateAll().then(result => {
+      this.$validator.validateAll().then((result) => {
         if (result) {
-          this.$store.dispatch('signUp', this.credentials);
-          this.signUpSent = true;
+          this.$store.dispatch('signUp', this.credentials)
+            .then(() => {
+              this.signUpSent = true;
+            });
         }
       });
     },
