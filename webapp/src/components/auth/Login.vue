@@ -46,6 +46,9 @@
                           :class="{'is-loading' : isLoading}">Login</button>
                 </p>
               </div>
+              <p v-show="serviceError.errorMessage && hasBeenSubmitted" class="help is-danger">
+                {{ serviceError.errorMessage }}
+              </p>
             </form>
           </div>
         </div>

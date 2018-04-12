@@ -20,21 +20,19 @@ export default {
         commit(types.AUTHENTICATE, user);
         return user;
       }).catch((error) => {
-        if (error.code === 'UserNotConfirmedException') {
-          console.error('TODO: User must be confirmed');
-        } else {
-          commit(types.ERROR, error);
-        }
+        commit(types.ERROR, { errorMessage: error.message });
+        throw error;
       });
   },
 
 
   signUp({ commit }, credentials) {
-    AuthService.signUp(credentials)
+    return AuthService.signUp(credentials)
       .then((user) => {
         commit(types.SIGNED_UP, { user });
       }).catch((error) => {
-        commit(types.ERROR, error);
+        commit(types.ERROR, { errorMessage: error.message });
+        throw error;
       });
   },
   signOut({ commit }) {
