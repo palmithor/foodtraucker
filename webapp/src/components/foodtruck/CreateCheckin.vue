@@ -2,11 +2,12 @@
 <template>
   <section class="section hero foodtraucker is-fullheight">
     <div class="hero-body">
-      <div class="container has-text-centered">
+      <div class="container">
         <div class="column is-4 is-offset-4">
           <div class="box">
             <form>
               <div class="field">
+                <label class="label">Latitude</label>
                 <p class="control has-icons-left has-icons-right">
                   <input v-validate="{required: true, max_value: 90, min_value: -90  }" v-model="checkin.lat" name="Latitude"
                          type="text" class="input" placeholder="Latitude"
@@ -21,6 +22,7 @@
                 </p>
               </div>
               <div class="field">
+                <label class="label">Longitude</label>
                 <p class="control has-icons-left has-icons-right">
                   <input v-validate="{required: true, max_value: 180, min_value: -180  }" v-model="checkin.lon" name="Longitude"
                          type="text" class="input" placeholder="Longitude"
