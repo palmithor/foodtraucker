@@ -11,6 +11,42 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
 
   const body = JSON.parse(event.body as string);
 
+  if (body.checkin > body.checkout) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ errorMessage: 'Checkout must be later than checkin' }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+      },
+    };
+  }
+
+  const overlappingCheckinScanResult = await dynamodb
+    .scan({
+      TableName: tableName,
+      FilterExpression:
+        '#foodtruckId = :foodtruckId AND #checkin <= :incomingCheckout AND #checkout >= :incomingCheckin',
+      ExpressionAttributeNames: {
+        '#foodtruckId': 'foodtruck_id',
+        '#checkin': 'checkin',
+        '#checkout': 'checkout',
+      },
+      ExpressionAttributeValues: {
+        ':foodtruckId': { S: event.pathParameters!.id },
+        ':incomingCheckin': { N: body.checkin.toString() },
+        ':incomingCheckout': { N: body.checkout.toString() },
+      },
+    })
+    .promise();
+
+  if (overlappingCheckinScanResult.Items && overlappingCheckinScanResult.Items.length > 0) {
+    return {
+      statusCode: 409,
+      body: JSON.stringify({ errorMessage: 'The given Foodtruck is already checked in at this time' }),
+    };
+  }
   // todo find food truck and include name in checkin data
 
   const id = uuid();
@@ -51,9 +87,9 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
   return {
     statusCode: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     },
     body: JSON.stringify({
       id,
