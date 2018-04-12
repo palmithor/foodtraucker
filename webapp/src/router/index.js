@@ -5,7 +5,7 @@ import Home from '@/components/home/Home';
 import Login from '@/components/auth/Login';
 import SignUp from '@/components/auth/SignUp';
 import Dashboard from '@/components/dashboard/Dashboard';
-import Checkin from '@/components/foodtruck/Checkin';
+import CreateCheckin from '@/components/foodtruck/CreateCheckin';
 import Foodtruck from '@/components/foodtruck/Foodtruck';
 import CreateFoodtruck from '@/components/foodtruck/CreateFoodtruck';
 
@@ -61,9 +61,10 @@ export default new Router({
       beforeEnter: requireAuth,
     },
     {
-      path: '/foodtrucks/:id/checkins',
-      name: 'foodtruck-checkin',
-      component: Checkin,
+      path: '/foodtrucks/:id/checkins/create',
+      name: 'checkin-create',
+      props: true,
+      component: CreateCheckin,
       beforeEnter: requireAuth,
     },
     {
