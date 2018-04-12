@@ -9,13 +9,13 @@
         </div>
         <div class="media-content">
           <p class="title is-4">{{ foodtruck.name }}</p>
-          <p class="subtitle is-6">Available since {{ foodtruck.created }}</p>
+          <p class="subtitle is-6">Created at {{ foodtruck.created }}</p>
         </div>
       </div>
     </div>
     <footer class="card-footer">
-      <router-link  :to="{ name: 'foodtruck', params: {id : foodtruck.id} }"
-                    class="card-footer-item">View</router-link>
+      <!--<router-link  :to="{ name: 'foodtruck', params: {id : foodtruck.id} }"
+                    class="card-footer-item">View</router-link> -->
       <router-link  :to="{ name: 'checkin-create', params: {id : foodtruck.id} }"
                     class="card-footer-item">Checkin</router-link>
     </footer>

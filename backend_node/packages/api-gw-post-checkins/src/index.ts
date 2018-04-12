@@ -45,6 +45,11 @@ export const promiseHandler = async (event: APIGatewayEvent) => {
     return {
       statusCode: 409,
       body: JSON.stringify({ errorMessage: 'The given Foodtruck is already checked in at this time' }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+      },
     };
   }
   // todo find food truck and include name in checkin data
