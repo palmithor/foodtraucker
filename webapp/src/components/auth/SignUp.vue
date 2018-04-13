@@ -83,7 +83,7 @@ export default {
   }),
   computed: {
     serviceError() {
-      return this.$store.state.auth.error;
+      return this.$store.state.auth.error ? this.$store.state.auth.error : {};
     },
     isLoading() {
       return this.$store.state.auth.loading;
