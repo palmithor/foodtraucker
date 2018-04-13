@@ -3,9 +3,9 @@ import mutations from './mutations';
 import getters from './getters';
 
 const state = {
-  user: null,
+  user: undefined,
   loading: false,
-  error: null,
+  error: undefined,
 };
 
 

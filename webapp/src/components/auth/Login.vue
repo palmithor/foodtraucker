@@ -46,7 +46,8 @@
                           :class="{'is-loading' : isLoading}">Login</button>
                 </p>
               </div>
-              <p v-show="serviceError.errorMessage && hasBeenSubmitted" class="help is-danger">
+              <p v-show="serviceError.errorMessage && hasBeenSubmitted"
+                 class="help is-danger">
                 {{ serviceError.errorMessage }}
               </p>
             </form>
@@ -69,7 +70,7 @@ export default {
   }),
   computed: {
     serviceError() {
-      return this.$store.state.auth.error;
+      return this.$store.state.auth.error ? this.$store.state.auth.error : {};
     },
     isLoading() {
       return this.$store.state.auth.loading;
